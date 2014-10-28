@@ -1,0 +1,8 @@
+var x:integer;
+var z:string;
+var ab:char;
+{
+	ab = 'c';
+	x = 2;
+	y = 3 + 2;
+	}

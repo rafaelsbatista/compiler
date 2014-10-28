@@ -1,0 +1,20 @@
+var y:integer;
+var x:integer;
+var z:string;
+var ab:char;
+{
+	ab = 'c';
+	x = 2;
+	y = 3 + 2;
+	var ab:char;
+	z = "rafael";
+	ab = 'o';
+	var abC:char;
+	abC = 'p';
+	while x != y do
+	{
+		if x>y then x = x - y;
+		else y = y - x;
+	}
+	x = 2 + 3 * 4;
+}
