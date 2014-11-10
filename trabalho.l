@@ -3,7 +3,6 @@
 	#include <string.h>
 	#include "trabalho.tab.h"
 	#include "sToken.h"
-	#include "structure.h"
 	#include "attribute.h"
 %%
 
@@ -16,9 +15,9 @@
 "==" 		return T_EQEQ;
 "&&" 		return T_AND;
 "||" 		return T_OR;
-"+" 		{printf("mais\n"); return T_PLUS;}
+"+" 		{return T_PLUS;}
 "-" 		return T_MINUS;
-"*" 		{printf("vezes\n"); return T_TIMES;}
+"*" 		{return T_TIMES;}
 "/" 		return T_DIVIDE;
 ":"			return T_COLON;
 ";" 		return T_SEMICOLON;
@@ -35,7 +34,7 @@
 "then"		return R_THEN;
 "if" 		return R_IF;
 "else" 		return R_ELSE;
-"while"		{printf("while\n"); return R_WHILE;} 
+"while"		{return R_WHILE;} 
 "do" 		return R_DO;
 "break"     return R_BREAK;
 "true"		{
@@ -50,20 +49,15 @@
 			}
 
 '[a-zA-Z]' {
-			printf("adicionou char\n");
 			yylval.sToken = addCharConst((yytext + 1)[0]);
-			printf("saiu adicionou char\n");
 			return T_CHAR;
 		}
 ["][^"]*["] {
-			printf("pegando string/n");
 			char* string;
 			string = (char*) malloc(sizeof(char)*(strlen(yytext-2)));
 			strncpy(string,(yytext+1),strlen(yytext-2));
 			string[ strlen(string)-1 ] = '\0';
-			yylval.sToken = addStringConst("rafael");
-			
-			printf("pegando string saindo/n");
+			yylval.sToken = addStringConst(string);
 			return T_STRING;
 		}
 [a-zA-Z][a-zA-Z0-9]* {
