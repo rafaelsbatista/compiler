@@ -80,8 +80,22 @@
 		return 0;
 	}
 	
+	object int_ = { -1, NULL, SCALAR_TYPE_};
+	pobject pInt = &int_;
+	
+	object char_ = { -1, NULL, SCALAR_TYPE_};
+	pobject pChar = &char_;
+	
+	object bool_ = { -1, NULL, SCALAR_TYPE_};
+	pobject pBool = &bool_;
+	
+	object string_ = { -1, NULL, SCALAR_TYPE_};
+	pobject pString = &string_;
+	
+	object universal_ = { -1, NULL, SCALAR_TYPE_};
+	pobject pUniversal = &universal_;
 
-#line 85 "trabalho.tab.c" /* yacc.c:339  */
+#line 99 "trabalho.tab.c" /* yacc.c:339  */
 
 # ifndef YY_NULLPTR
 #  if defined __cplusplus && 201103L <= __cplusplus
@@ -160,7 +174,7 @@ extern int yydebug;
 typedef union YYSTYPE YYSTYPE;
 union YYSTYPE
 {
-#line 19 "trabalho.y" /* yacc.c:355  */
+#line 33 "trabalho.y" /* yacc.c:355  */
 
 	int integer;
 	int boolean;
@@ -168,9 +182,10 @@ union YYSTYPE
 	struct identificador *id;
 	char *string;
 	int sToken;
+	struct object *obj;
 	int label;
 
-#line 174 "trabalho.tab.c" /* yacc.c:355  */
+#line 189 "trabalho.tab.c" /* yacc.c:355  */
 };
 # define YYSTYPE_IS_TRIVIAL 1
 # define YYSTYPE_IS_DECLARED 1
@@ -185,7 +200,7 @@ int yyparse (void);
 
 /* Copy the second part of user declarations.  */
 
-#line 189 "trabalho.tab.c" /* yacc.c:358  */
+#line 204 "trabalho.tab.c" /* yacc.c:358  */
 
 #ifdef short
 # undef short
@@ -486,12 +501,12 @@ static const yytype_uint8 yytranslate[] =
   /* YYRLINE[YYN] -- Source line where rule number YYN was defined.  */
 static const yytype_uint16 yyrline[] =
 {
-       0,    72,    72,    81,    82,    85,    86,    89,   100,   101,
-     107,   112,   116,   120,   126,   129,   131,   132,   134,   141,
-     148,   154,   160,   165,   170,   171,   179,   180,   181,   184,
-     186,   192,   197,   202,   207,   212,   217,   222,   228,   235,
-     242,   248,   254,   257,   258,   259,   260,   261,   262,   263,
-     268,   270,   278,   294,   312,   323,   334,   345,   357
+       0,    87,    87,    96,    97,   100,   101,   104,   117,   118,
+     124,   127,   130,   133,   138,   141,   143,   144,   146,   153,
+     160,   166,   172,   177,   182,   183,   194,   195,   196,   199,
+     204,   210,   215,   219,   223,   228,   233,   238,   243,   250,
+     256,   262,   268,   272,   273,   274,   275,   276,   277,   278,
+     286,   288,   296,   311,   325,   331,   337,   344,   353
 };
 #endif
 
@@ -1336,7 +1351,7 @@ yyreduce:
   switch (yyn)
     {
         case 2:
-#line 72 "trabalho.y" /* yacc.c:1646  */
+#line 87 "trabalho.y" /* yacc.c:1646  */
     {endBlock();
 			fprintf(asm_file, "%s", "\n-- end");
 
@@ -1344,469 +1359,445 @@ yyreduce:
 
 			printf("Codigo gerado com sucesso! [code.asm]\n");
 		   }
-#line 1348 "trabalho.tab.c" /* yacc.c:1646  */
+#line 1363 "trabalho.tab.c" /* yacc.c:1646  */
     break;
 
   case 7:
-#line 89 "trabalho.y" /* yacc.c:1646  */
+#line 104 "trabalho.y" /* yacc.c:1646  */
     {
-			identificador *idt = (yyvsp[-3].id);
-			while(idt != 0 && idt->obj->eKind == NO_KIND_DEF_){
-				idt->obj->eKind = VAR_;
-				idt->obj->attribute = (pattr)malloc(sizeof(attr));
-				idt->obj->attribute->type = (yyvsp[-1].id)->obj->attribute->type;
-				idt = idt->pNext;
+			printf("DEclarando variavel\n");
+			pobject ob = (yyvsp[-3].obj);
+			while(ob != 0 && ob->eKind == NO_KIND_DEF_){
+				ob->eKind = VAR_;
+				ob->_.Var.pType = (yyvsp[-1].obj);
+				ob = ob->pNext;
 			}
+			printf("saiu DEclarando variavel\n");
+			
 		}
-#line 1362 "trabalho.tab.c" /* yacc.c:1646  */
+#line 1379 "trabalho.tab.c" /* yacc.c:1646  */
     break;
 
   case 8:
-#line 100 "trabalho.y" /* yacc.c:1646  */
-    {addIdentificador((yyval.id),(yyvsp[-2].id),(yyvsp[0].id));}
-#line 1368 "trabalho.tab.c" /* yacc.c:1646  */
+#line 117 "trabalho.y" /* yacc.c:1646  */
+    {addIdentificador((yyval.obj),(yyvsp[-2].obj),(yyvsp[0].obj));}
+#line 1385 "trabalho.tab.c" /* yacc.c:1646  */
     break;
 
   case 9:
-#line 101 "trabalho.y" /* yacc.c:1646  */
+#line 118 "trabalho.y" /* yacc.c:1646  */
     {
 		//printf("LI\n");
-		addIdentificador((yyval.id),0,(yyvsp[0].id));
+		addIdentificador((yyval.obj),0,(yyvsp[0].obj));
 		}
-#line 1377 "trabalho.tab.c" /* yacc.c:1646  */
+#line 1394 "trabalho.tab.c" /* yacc.c:1646  */
     break;
 
   case 10:
-#line 107 "trabalho.y" /* yacc.c:1646  */
+#line 124 "trabalho.y" /* yacc.c:1646  */
     { 
-					identificador *idt = (struct identificador*)malloc(sizeof(struct identificador));
-					idt->obj = createType(INTEGER); 
-					(yyval.id) = idt;
+					(yyval.obj) = pInt;
 					}
-#line 1387 "trabalho.tab.c" /* yacc.c:1646  */
+#line 1402 "trabalho.tab.c" /* yacc.c:1646  */
     break;
 
   case 11:
-#line 112 "trabalho.y" /* yacc.c:1646  */
-    { identificador *idt = (struct identificador*)malloc(sizeof(struct identificador));
-					idt->obj = createType(CHARACTER); 
-					(yyval.id) = idt;
+#line 127 "trabalho.y" /* yacc.c:1646  */
+    { 
+					(yyval.obj) = pChar;
 					}
-#line 1396 "trabalho.tab.c" /* yacc.c:1646  */
+#line 1410 "trabalho.tab.c" /* yacc.c:1646  */
     break;
 
   case 12:
-#line 116 "trabalho.y" /* yacc.c:1646  */
-    { identificador *idt = (struct identificador*)malloc(sizeof(struct identificador));
-					idt->obj = createType(BOOLEAN); 
-					(yyval.id) = idt;
+#line 130 "trabalho.y" /* yacc.c:1646  */
+    { 
+					(yyval.obj) = pBool;
 					}
-#line 1405 "trabalho.tab.c" /* yacc.c:1646  */
+#line 1418 "trabalho.tab.c" /* yacc.c:1646  */
     break;
 
   case 13:
-#line 120 "trabalho.y" /* yacc.c:1646  */
-    { identificador *idt = (struct identificador*)malloc(sizeof(struct identificador));
-					idt->obj = createType(STRING); 
-					(yyval.id) = idt;
+#line 133 "trabalho.y" /* yacc.c:1646  */
+    { 
+					(yyval.obj) = pString;
 					}
-#line 1414 "trabalho.tab.c" /* yacc.c:1646  */
+#line 1426 "trabalho.tab.c" /* yacc.c:1646  */
     break;
 
   case 14:
-#line 126 "trabalho.y" /* yacc.c:1646  */
+#line 138 "trabalho.y" /* yacc.c:1646  */
     { endBlock();}
-#line 1420 "trabalho.tab.c" /* yacc.c:1646  */
+#line 1432 "trabalho.tab.c" /* yacc.c:1646  */
     break;
 
   case 18:
-#line 134 "trabalho.y" /* yacc.c:1646  */
+#line 146 "trabalho.y" /* yacc.c:1646  */
     {
 		int l = newLabel();
 		(yyval.label) = l;
 		fprintf(asm_file,"\tTJMP_FW L%d\n",l);
 		}
-#line 1430 "trabalho.tab.c" /* yacc.c:1646  */
+#line 1442 "trabalho.tab.c" /* yacc.c:1646  */
     break;
 
   case 19:
-#line 141 "trabalho.y" /* yacc.c:1646  */
+#line 153 "trabalho.y" /* yacc.c:1646  */
     {
 		int l = newLabel();
 		(yyval.label) = l;
 		fprintf(asm_file,"\tTJMP_FW L%d\nL%d\n",l,l-1);
 		}
-#line 1440 "trabalho.tab.c" /* yacc.c:1646  */
+#line 1452 "trabalho.tab.c" /* yacc.c:1646  */
     break;
 
   case 20:
-#line 148 "trabalho.y" /* yacc.c:1646  */
+#line 160 "trabalho.y" /* yacc.c:1646  */
     {
 	int l = newLabel();
 	(yyval.label) = l;
 	fprintf(asm_file,"L%d\n",l);
 }
-#line 1450 "trabalho.tab.c" /* yacc.c:1646  */
+#line 1462 "trabalho.tab.c" /* yacc.c:1646  */
     break;
 
   case 21:
-#line 154 "trabalho.y" /* yacc.c:1646  */
+#line 166 "trabalho.y" /* yacc.c:1646  */
     {
-			if(!CheckType((yyvsp[-3].id)->obj,BOOLEAN)) {yyerror("Erro if\n");YYERROR;}
-			printf("entrou no if\n");
+			if(!CheckTypes((yyvsp[-3].obj),pBool)) {yyerror("Erro if\n");YYERROR;}
+			//printf("entrou no if\n");
 			fprintf(asm_file,"L%d:\n",(yyvsp[-1].label));
 			
 		}
-#line 1461 "trabalho.tab.c" /* yacc.c:1646  */
+#line 1473 "trabalho.tab.c" /* yacc.c:1646  */
     break;
 
   case 22:
-#line 160 "trabalho.y" /* yacc.c:1646  */
+#line 172 "trabalho.y" /* yacc.c:1646  */
     {
-			if(CheckType((yyvsp[-6].id)->obj,BOOLEAN) != 1) {yyerror("Erro if\n");YYERROR;}
-			printf("entrou no if then else tipo do 2 %d %d  <- BOOLEAN \n",(yyvsp[-6].id)->obj->attribute->type,BOOLEAN);
+			if(CheckTypes((yyvsp[-6].obj),pBool) != 1) {yyerror("Erro if\n");YYERROR;}
+			//printf("entrou no if then else tipo do 2 %d %d  <- BOOLEAN \n",$2->obj->attribute->type,BOOLEAN);
 			fprintf(asm_file,"L%d:\n",(yyvsp[-1].label));
 		}
-#line 1471 "trabalho.tab.c" /* yacc.c:1646  */
+#line 1483 "trabalho.tab.c" /* yacc.c:1646  */
     break;
 
   case 23:
-#line 165 "trabalho.y" /* yacc.c:1646  */
+#line 177 "trabalho.y" /* yacc.c:1646  */
     {
-			if(!CheckType((yyvsp[-3].id)->obj,BOOLEAN)) {yyerror("Erro while\n");YYERROR;}
+			if(!CheckTypes((yyvsp[-3].obj),pBool)) {yyerror("Erro while\n");YYERROR;}
 			
 			fprintf(asm_file,"\tJMP_BW L%d\nL%d\n",(yyvsp[-4].label),(yyvsp[-1].label));
 		}
-#line 1481 "trabalho.tab.c" /* yacc.c:1646  */
+#line 1493 "trabalho.tab.c" /* yacc.c:1646  */
     break;
 
   case 25:
-#line 171 "trabalho.y" /* yacc.c:1646  */
+#line 183 "trabalho.y" /* yacc.c:1646  */
     {
 			printf("Testando igual \n");
-			if(!CheckTypes((yyvsp[-4].id)->obj,(yyvsp[-1].id)->obj)) {
+			if(!CheckTypes((yyvsp[-4].obj)->_.Var.pType,(yyvsp[-1].obj))) {
+				printf(" Erro tipo 1 %d , tipo 2 %d\n", (yyvsp[-4].obj)->eKind,(yyvsp[-1].obj)->eKind);
 				yyerror("Erro atibuicao\n");
 				YYERROR;
 			}
-			fprintf(asm_file,"\tSTORE_VAR %d\n",(yyvsp[-4].id)->sToken);
+			int i  = 32;
+			fprintf(asm_file,"\tSTORE_VAR %d\n",i);
+			printf("saiu\n");
 		}
-#line 1494 "trabalho.tab.c" /* yacc.c:1646  */
+#line 1509 "trabalho.tab.c" /* yacc.c:1646  */
     break;
 
   case 29:
-#line 184 "trabalho.y" /* yacc.c:1646  */
-    {fprintf(asm_file,"\tDUP\n");}
-#line 1500 "trabalho.tab.c" /* yacc.c:1646  */
+#line 199 "trabalho.y" /* yacc.c:1646  */
+    {
+
+				printf("rope rope aaaaaaaaaaa\n");
+		fprintf(asm_file,"\tDUP\n");}
+#line 1518 "trabalho.tab.c" /* yacc.c:1646  */
     break;
 
   case 30:
-#line 186 "trabalho.y" /* yacc.c:1646  */
-    { if(!CheckType((yyvsp[-2].id)->obj,BOOLEAN)) {yyerror("Erro and\n");YYERROR;}
-				    (yyval.id) = (struct identificador*)malloc(sizeof(struct identificador));
-					(yyval.id)->obj = createType(BOOLEAN);
+#line 204 "trabalho.y" /* yacc.c:1646  */
+    { if(!CheckTypes((yyvsp[-2].obj),(yyvsp[0].obj))) {yyerror("Erro and\n");YYERROR;}
+					if(!CheckTypes((yyvsp[-2].obj),pBool)) {yyerror("Erro and 2\n");YYERROR;}
+					(yyval.obj) = pBool;
 					
 					fprintf(asm_file,"\tAND\n");
 				  }
-#line 1511 "trabalho.tab.c" /* yacc.c:1646  */
+#line 1529 "trabalho.tab.c" /* yacc.c:1646  */
     break;
 
   case 31:
-#line 192 "trabalho.y" /* yacc.c:1646  */
-    { if(!CheckType((yyvsp[-2].id)->obj,BOOLEAN)) {yyerror("Erro or\n");YYERROR;}
-				    (yyval.id) = (struct identificador*)malloc(sizeof(struct identificador));
-					(yyval.id)->obj = createType(BOOLEAN);
+#line 210 "trabalho.y" /* yacc.c:1646  */
+    { if(!CheckTypes((yyvsp[-2].obj),(yyvsp[0].obj))) {yyerror("Erro or\n");YYERROR;}
+				   if(!CheckTypes((yyvsp[-2].obj),pBool)) {yyerror ("Erro or 2\n");YYERROR;}
+					(yyval.obj) = pBool;
 					fprintf(asm_file,"\tOR\n");
 				  }
-#line 1521 "trabalho.tab.c" /* yacc.c:1646  */
+#line 1539 "trabalho.tab.c" /* yacc.c:1646  */
     break;
 
   case 32:
-#line 197 "trabalho.y" /* yacc.c:1646  */
-    { if(!CheckTypes((yyvsp[-2].id)->obj,(yyvsp[0].id)->obj)) {yyerror("Erro less than\n");YYERROR;}
-				    (yyval.id) = (struct identificador*)malloc(sizeof(struct identificador));
-					(yyval.id)->obj = createType(BOOLEAN);
+#line 215 "trabalho.y" /* yacc.c:1646  */
+    { if(!CheckTypes((yyvsp[-2].obj),(yyvsp[0].obj))) {yyerror("Erro less than\n");YYERROR;}
+				    (yyval.obj) = pBool;
 					fprintf(asm_file,"\tLT\n");
 				  }
-#line 1531 "trabalho.tab.c" /* yacc.c:1646  */
+#line 1548 "trabalho.tab.c" /* yacc.c:1646  */
     break;
 
   case 33:
-#line 202 "trabalho.y" /* yacc.c:1646  */
-    { if(!CheckTypes((yyvsp[-2].id)->obj,(yyvsp[0].id)->obj)) {yyerror("Erro greater than\n");YYERROR;}
-				    (yyval.id) = (struct identificador*)malloc(sizeof(struct identificador));
-					(yyval.id)->obj = createType(BOOLEAN);
+#line 219 "trabalho.y" /* yacc.c:1646  */
+    { if(!CheckTypes((yyvsp[-2].obj),(yyvsp[0].obj))) {yyerror("Erro greater than\n");YYERROR;}
+				    (yyval.obj) = pBool;
 					fprintf(asm_file,"\tGT\n");
 				  }
-#line 1541 "trabalho.tab.c" /* yacc.c:1646  */
+#line 1557 "trabalho.tab.c" /* yacc.c:1646  */
     break;
 
   case 34:
-#line 207 "trabalho.y" /* yacc.c:1646  */
-    { if(!CheckTypes((yyvsp[-2].id)->obj,(yyvsp[0].id)->obj)) {yyerror("Erro less equal\n");YYERROR;}
-				    (yyval.id) = (struct identificador*)malloc(sizeof(struct identificador));
-					(yyval.id)->obj = createType(BOOLEAN);
+#line 223 "trabalho.y" /* yacc.c:1646  */
+    { 
+					if(!CheckTypes((yyvsp[-2].obj),(yyvsp[0].obj))) {yyerror("Erro less equal\n");YYERROR;}
+				    (yyval.obj) = pBool;
 					fprintf(asm_file,"\tLE\n");
 				  }
-#line 1551 "trabalho.tab.c" /* yacc.c:1646  */
+#line 1567 "trabalho.tab.c" /* yacc.c:1646  */
     break;
 
   case 35:
-#line 212 "trabalho.y" /* yacc.c:1646  */
-    { if(!CheckTypes((yyvsp[-2].id)->obj,(yyvsp[0].id)->obj)) {yyerror("Erro greater equal\n");YYERROR;}
-				    (yyval.id) = (struct identificador*)malloc(sizeof(struct identificador));
-					(yyval.id)->obj = createType(BOOLEAN);
+#line 228 "trabalho.y" /* yacc.c:1646  */
+    { 	
+					if(!CheckTypes((yyvsp[-2].obj),(yyvsp[0].obj))) {yyerror("Erro greater equal\n");YYERROR;}
+				    (yyval.obj) = pBool;
 					fprintf(asm_file,"\tGE\n");
 				  }
-#line 1561 "trabalho.tab.c" /* yacc.c:1646  */
+#line 1577 "trabalho.tab.c" /* yacc.c:1646  */
     break;
 
   case 36:
-#line 217 "trabalho.y" /* yacc.c:1646  */
-    { if(!CheckTypes((yyvsp[-2].id)->obj,(yyvsp[0].id)->obj)) {yyerror("Erro equal equal\n");YYERROR;}
-				    (yyval.id) = (struct identificador*)malloc(sizeof(struct identificador));
-					(yyval.id)->obj = createType(BOOLEAN);
+#line 233 "trabalho.y" /* yacc.c:1646  */
+    { 
+					if(!CheckTypes((yyvsp[-2].obj),(yyvsp[0].obj))) {yyerror("Erro equal equal\n");YYERROR;}
+				    (yyval.obj) = pBool;
 					fprintf(asm_file,"\tEQ\n");
 				  }
-#line 1571 "trabalho.tab.c" /* yacc.c:1646  */
+#line 1587 "trabalho.tab.c" /* yacc.c:1646  */
     break;
 
   case 37:
-#line 222 "trabalho.y" /* yacc.c:1646  */
+#line 238 "trabalho.y" /* yacc.c:1646  */
     {
-					if(!CheckTypes((yyvsp[-2].id)->obj,(yyvsp[0].id)->obj)) {yyerror("Erro not equal\n");YYERROR;}
-				    (yyval.id) = (struct identificador*)malloc(sizeof(struct identificador));
-					(yyval.id)->obj = createType(BOOLEAN);
+					if(!CheckTypes((yyvsp[-2].obj),(yyvsp[0].obj))) {yyerror("Erro not equal\n");YYERROR;}
+				    (yyval.obj)  = pBool;
 					fprintf(asm_file,"\tNE\n");
 				  }
-#line 1582 "trabalho.tab.c" /* yacc.c:1646  */
+#line 1597 "trabalho.tab.c" /* yacc.c:1646  */
     break;
 
   case 38:
-#line 228 "trabalho.y" /* yacc.c:1646  */
-    { if(!CheckTypes((yyvsp[-2].id)->obj,(yyvsp[0].id)->obj)) {yyerror("Erro plus\n");YYERROR;}
-					if(!CheckType((yyvsp[-2].id)->obj,INTEGER) && !CheckType((yyvsp[-2].id)->obj,STRING)) yyerror("Erro tipo plus\n");
-				    (yyval.id) = (struct identificador*)malloc(sizeof(struct identificador));
-					if(CheckType((yyvsp[-2].id)->obj,INTEGER)) (yyval.id)->obj = createType(INTEGER);
-					else (yyval.id)->obj = createType(STRING);
+#line 243 "trabalho.y" /* yacc.c:1646  */
+    { 
+					if(!CheckTypes((yyvsp[-2].obj),(yyvsp[0].obj))) {yyerror("Erro plus\n");YYERROR;}
+					if(!CheckTypes((yyvsp[-2].obj),pInt) && !CheckTypes((yyvsp[-2].obj),pString)) yyerror("Erro tipo plus\n");
+				    if(CheckTypes((yyvsp[-2].obj),pInt)) (yyval.obj) = pInt;
+					else (yyval.obj) = pString;
 					fprintf(asm_file,"\tADD\n");
 				  }
-#line 1594 "trabalho.tab.c" /* yacc.c:1646  */
+#line 1609 "trabalho.tab.c" /* yacc.c:1646  */
     break;
 
   case 39:
-#line 235 "trabalho.y" /* yacc.c:1646  */
-    { if(!CheckTypes((yyvsp[-2].id)->obj,(yyvsp[0].id)->obj)) {yyerror("Erro minus\n");YYERROR;}
-					if(!CheckType((yyvsp[-2].id)->obj,INTEGER)) {yyerror("Erro tipo minus\n");YYERROR;}
-				    (yyval.id) = (struct identificador*)malloc(sizeof(struct identificador));
-					if(CheckType((yyvsp[-2].id)->obj,INTEGER)) (yyval.id)->obj = createType(INTEGER);
-					else (yyval.id)->obj = createType(STRING);
+#line 250 "trabalho.y" /* yacc.c:1646  */
+    { 
+					if(!CheckTypes((yyvsp[-2].obj),(yyvsp[0].obj))) {yyerror("Erro minus\n");YYERROR;}
+					if(!CheckTypes((yyvsp[-2].obj),pInt)) {yyerror("Erro tipo minus\n");YYERROR;}
+				    (yyval.obj) = pInt;
 					fprintf(asm_file,"\tSUB\n");
 				  }
-#line 1606 "trabalho.tab.c" /* yacc.c:1646  */
+#line 1620 "trabalho.tab.c" /* yacc.c:1646  */
     break;
 
   case 40:
-#line 242 "trabalho.y" /* yacc.c:1646  */
-    { if(!CheckTypes((yyvsp[-2].id)->obj,(yyvsp[0].id)->obj)) {yyerror("Erro times\n");YYERROR;}
-					if(!CheckType((yyvsp[-2].id)->obj,INTEGER)) {yyerror("Erro tipo Times\n");YYERROR;}
-				    (yyval.id) = (struct identificador*)malloc(sizeof(struct identificador));
-					(yyval.id)->obj = createType(INTEGER);
+#line 256 "trabalho.y" /* yacc.c:1646  */
+    { 
+					if(!CheckTypes((yyvsp[-2].obj),(yyvsp[0].obj))) {yyerror("Erro times\n");YYERROR;}
+					if(!CheckTypes((yyvsp[-2].obj),pInt)) {yyerror("Erro tipo Times\n");YYERROR;}
+				    (yyval.obj) = pInt;
 					fprintf(asm_file,"\tMUL\n");
 				  }
-#line 1617 "trabalho.tab.c" /* yacc.c:1646  */
+#line 1631 "trabalho.tab.c" /* yacc.c:1646  */
     break;
 
   case 41:
-#line 248 "trabalho.y" /* yacc.c:1646  */
-    { if(!CheckTypes((yyvsp[-2].id)->obj,(yyvsp[0].id)->obj)) {yyerror("Erro divide\n");YYERROR;}
-					if(!CheckType((yyvsp[-2].id)->obj,INTEGER)) {yyerror("Erro divide plus\n");YYERROR;}
-				    (yyval.id) = (struct identificador*)malloc(sizeof(struct identificador));
-					(yyval.id)->obj = createType(INTEGER);
+#line 262 "trabalho.y" /* yacc.c:1646  */
+    { 
+					if(!CheckTypes((yyvsp[-2].obj),(yyvsp[0].obj))) {yyerror("Erro divide\n");YYERROR;}
+					if(!CheckTypes((yyvsp[-2].obj),pInt)) {yyerror("Erro divide plus\n");YYERROR;}
+				    (yyval.obj) = pInt;
 					fprintf(asm_file,"\tDIV\n");
 				  }
-#line 1628 "trabalho.tab.c" /* yacc.c:1646  */
+#line 1642 "trabalho.tab.c" /* yacc.c:1646  */
     break;
 
   case 42:
-#line 254 "trabalho.y" /* yacc.c:1646  */
-    {(yyval.id) = (yyvsp[0].id);}
-#line 1634 "trabalho.tab.c" /* yacc.c:1646  */
+#line 268 "trabalho.y" /* yacc.c:1646  */
+    {
+			printf("f vira e\n");(yyval.obj) = (yyvsp[0].obj);}
+#line 1649 "trabalho.tab.c" /* yacc.c:1646  */
     break;
 
   case 43:
-#line 257 "trabalho.y" /* yacc.c:1646  */
-    {(yyval.id) = (yyvsp[0].id);}
-#line 1640 "trabalho.tab.c" /* yacc.c:1646  */
+#line 272 "trabalho.y" /* yacc.c:1646  */
+    {(yyval.obj) = (yyvsp[0].obj);}
+#line 1655 "trabalho.tab.c" /* yacc.c:1646  */
     break;
 
   case 44:
-#line 258 "trabalho.y" /* yacc.c:1646  */
-    {(yyval.id) = (yyvsp[0].id);}
-#line 1646 "trabalho.tab.c" /* yacc.c:1646  */
+#line 273 "trabalho.y" /* yacc.c:1646  */
+    {(yyval.obj) = (yyvsp[0].obj);}
+#line 1661 "trabalho.tab.c" /* yacc.c:1646  */
     break;
 
   case 45:
-#line 259 "trabalho.y" /* yacc.c:1646  */
-    {(yyval.id) = (yyvsp[0].id);}
-#line 1652 "trabalho.tab.c" /* yacc.c:1646  */
+#line 274 "trabalho.y" /* yacc.c:1646  */
+    {(yyval.obj) = (yyvsp[0].obj);}
+#line 1667 "trabalho.tab.c" /* yacc.c:1646  */
     break;
 
   case 46:
-#line 260 "trabalho.y" /* yacc.c:1646  */
-    {(yyval.id) = (yyvsp[0].id);}
-#line 1658 "trabalho.tab.c" /* yacc.c:1646  */
+#line 275 "trabalho.y" /* yacc.c:1646  */
+    {(yyval.obj) = (yyvsp[0].obj);}
+#line 1673 "trabalho.tab.c" /* yacc.c:1646  */
     break;
 
   case 47:
-#line 261 "trabalho.y" /* yacc.c:1646  */
-    { (yyval.id) = (yyvsp[0].id);}
-#line 1664 "trabalho.tab.c" /* yacc.c:1646  */
+#line 276 "trabalho.y" /* yacc.c:1646  */
+    { (yyval.obj) = (yyvsp[0].obj);}
+#line 1679 "trabalho.tab.c" /* yacc.c:1646  */
     break;
 
   case 48:
-#line 262 "trabalho.y" /* yacc.c:1646  */
-    {(yyval.id) = (yyvsp[0].id);}
-#line 1670 "trabalho.tab.c" /* yacc.c:1646  */
+#line 277 "trabalho.y" /* yacc.c:1646  */
+    {(yyval.obj) = (yyvsp[0].obj);}
+#line 1685 "trabalho.tab.c" /* yacc.c:1646  */
     break;
 
   case 49:
-#line 263 "trabalho.y" /* yacc.c:1646  */
-    { (yyval.id) = (yyvsp[0].id);
-				fprintf(asm_file,"\tLOAD_VAR %d\n",(yyvsp[0].id)->sToken);
+#line 278 "trabalho.y" /* yacc.c:1646  */
+    { 
+				(yyval.obj) = (yyvsp[0].obj);
+				printf("rope rope\n");
+				fprintf(asm_file,"\tLOAD_VAR %d\n",(yyvsp[0].obj)->name);
+				printf("rope rope saiu\n");
 			}
-#line 1678 "trabalho.tab.c" /* yacc.c:1646  */
+#line 1696 "trabalho.tab.c" /* yacc.c:1646  */
     break;
 
   case 50:
-#line 268 "trabalho.y" /* yacc.c:1646  */
+#line 286 "trabalho.y" /* yacc.c:1646  */
     {newBlock();}
-#line 1684 "trabalho.tab.c" /* yacc.c:1646  */
+#line 1702 "trabalho.tab.c" /* yacc.c:1646  */
     break;
 
   case 51:
-#line 270 "trabalho.y" /* yacc.c:1646  */
+#line 288 "trabalho.y" /* yacc.c:1646  */
     {
 		asm_file = fopen("code.asm","w");
 
 		fprintf(asm_file, "%s", "-- Pascalmm Ver. 1.0\n\n");
 		newBlock();
 	}
-#line 1695 "trabalho.tab.c" /* yacc.c:1646  */
+#line 1713 "trabalho.tab.c" /* yacc.c:1646  */
     break;
 
   case 52:
-#line 278 "trabalho.y" /* yacc.c:1646  */
-    { identificador *idt = (struct identificador*)malloc(sizeof(struct identificador));
-			//printf("utilizacao da variavel %s token %d*\n",$1->id,$1->sToken);
+#line 296 "trabalho.y" /* yacc.c:1646  */
+    { 
+			printf("uso variavel\n");
 			pobject p = (pobject)malloc(sizeof(object));
-			if((p=Find((yyvsp[0].id)->sToken)) == 0){
+			if((p=Find((yyvsp[0].sToken))) == 0){
 				yyerror("Erro variavel nao declarada\n");
 				YYERROR;
-				p = Define((yyvsp[0].id)->sToken);
+				p = Define((yyvsp[0].sToken));
 			}
 			p->eKind = NO_KIND_DEF_;
-			(yyval.id) = idt;
-			strcpy((yyval.id)->id,(yyvsp[0].id)->id);
-			(yyval.id)->sToken = (yyvsp[0].id)->sToken;
-			(yyval.id)->obj = p;
+			p->name = (yyvsp[0].sToken);
+			(yyval.obj) = p;
+			printf("uso variavel saida\n");
 			}
-#line 1714 "trabalho.tab.c" /* yacc.c:1646  */
+#line 1731 "trabalho.tab.c" /* yacc.c:1646  */
     break;
 
   case 53:
-#line 294 "trabalho.y" /* yacc.c:1646  */
-    { identificador *idt = (struct identificador*)malloc(sizeof(struct identificador));
-			//printf("Definindo varivael name %s token %d\n", $1->id,$1->sToken);
+#line 311 "trabalho.y" /* yacc.c:1646  */
+    { 
 			pobject p = (pobject)malloc(sizeof(object));
-			printf("Segunda parte\n");
-			if( (p=Search((yyvsp[0].id)->sToken)) != 0){
+			if( (p=Search((yyvsp[0].sToken))) !=0 ){
 				yyerror("Erro declaração de variavel repetida\n");
 				YYERROR;
 			} else {
-				p = Define( (yyvsp[0].id)->sToken );
+				p = Define( (yyvsp[0].sToken) );
 			}
-			(yyval.id) = idt;
 			p->eKind = NO_KIND_DEF_;
-			strcpy((yyval.id)->id,(yyvsp[0].id)->id);
-			(yyval.id)->sToken = (yyvsp[0].id)->sToken;
-			(yyval.id)->obj = p;
+			p->name = (yyvsp[0].sToken);
+			(yyval.obj) = p;
 }
-#line 1735 "trabalho.tab.c" /* yacc.c:1646  */
+#line 1748 "trabalho.tab.c" /* yacc.c:1646  */
     break;
 
   case 54:
-#line 312 "trabalho.y" /* yacc.c:1646  */
-    { identificador *idt = (struct identificador*)malloc(sizeof(struct identificador));
-				idt->obj = (pobject)malloc(sizeof(object));
-				idt->obj->attribute = (pattr)malloc(sizeof(attr));
-				idt->obj->attribute->booleanVal = 1;
-				int tokenSecundario = addBooleanConst(1);
-				fprintf(asm_file,"\tLOAD_CONST %d\n", tokenSecundario);
-				idt->obj->attribute->type = BOOLEAN;
-				(yyval.id) = idt;
+#line 325 "trabalho.y" /* yacc.c:1646  */
+    { 
+				fprintf(asm_file,"\tLOAD_CONST %d\n", (yyvsp[0].sToken));
+				(yyval.obj) = pBool;
 				}
-#line 1749 "trabalho.tab.c" /* yacc.c:1646  */
+#line 1757 "trabalho.tab.c" /* yacc.c:1646  */
     break;
 
   case 55:
-#line 323 "trabalho.y" /* yacc.c:1646  */
-    { identificador *idt = (struct identificador*)malloc(sizeof(struct identificador));
-				idt->obj = (pobject)malloc(sizeof(object));
-				idt->obj->attribute = (pattr)malloc(sizeof(attr));
-				idt->obj->attribute->booleanVal = 0;
-				int tokenSecundario = addBooleanConst(0);
-				fprintf(asm_file,"\tLOAD_CONST %d\n", tokenSecundario);
-				idt->obj->attribute->type = BOOLEAN;
-				(yyval.id) = idt;
+#line 331 "trabalho.y" /* yacc.c:1646  */
+    { 
+				fprintf(asm_file,"\tLOAD_CONST %d\n", (yyvsp[0].sToken));
+				(yyval.obj) = pBool;
 				}
-#line 1763 "trabalho.tab.c" /* yacc.c:1646  */
+#line 1766 "trabalho.tab.c" /* yacc.c:1646  */
     break;
 
   case 56:
-#line 334 "trabalho.y" /* yacc.c:1646  */
-    { identificador *idt = (struct identificador*)malloc(sizeof(struct identificador));
-				idt->obj = (pobject)malloc(sizeof(object));
-				idt->obj->attribute = (pattr)malloc(sizeof(attr));
-				idt->obj->attribute->charVal = (yyvsp[0].character);
-				int tokenSecundario = addCharConst((yyvsp[0].character));
-				fprintf(asm_file,"\tLOAD_CONST %d\n", tokenSecundario);
-				idt->obj->attribute->type = CHARACTER;
-				(yyval.id) = idt;
+#line 337 "trabalho.y" /* yacc.c:1646  */
+    { 
+				fprintf(asm_file,"\tLOAD_CONST %d\n", (yyvsp[0].sToken));
+				printf("load char\n");
+				(yyval.obj) = pChar;
 				}
-#line 1777 "trabalho.tab.c" /* yacc.c:1646  */
+#line 1776 "trabalho.tab.c" /* yacc.c:1646  */
     break;
 
   case 57:
-#line 345 "trabalho.y" /* yacc.c:1646  */
-    { 
-				identificador *idt = (struct identificador*)malloc(sizeof(struct identificador));
-				idt->obj = (pobject)malloc(sizeof(object));
-				idt->obj->attribute = (pattr)malloc(sizeof(attr));
-				idt->obj->attribute->stringVal = (yyvsp[0].string);
-				int tokenSecundario = addStringConst((yyvsp[0].string));
-				fprintf(asm_file,"\tLOAD_CONST %d\n", tokenSecundario);
-				idt->obj->attribute->type = STRING;
-				(yyval.id) = idt;
+#line 344 "trabalho.y" /* yacc.c:1646  */
+    {
+				printf("String entrou\n");
+				fprintf(asm_file,"\tLOAD_CONST %d\n", (yyvsp[0].sToken));
+				(yyval.obj) = pString;
+				
+				printf("String entrou SAIU\n");
 				}
-#line 1792 "trabalho.tab.c" /* yacc.c:1646  */
+#line 1788 "trabalho.tab.c" /* yacc.c:1646  */
     break;
 
   case 58:
-#line 357 "trabalho.y" /* yacc.c:1646  */
-    { identificador *idt = (struct identificador*)malloc(sizeof(struct identificador));
-				idt->obj = (pobject)malloc(sizeof(object));
-				idt->obj->attribute = (pattr)malloc(sizeof(attr));
-				idt->obj->attribute->intVal = (yyvsp[0].integer);
-				int tokenSecundario = addIntConst((yyvsp[0].integer));
-				fprintf(asm_file,"\tLOAD_CONST %d\n", tokenSecundario);
-				idt->obj->attribute->type = INTEGER;
-				(yyval.id) = idt;
+#line 353 "trabalho.y" /* yacc.c:1646  */
+    { 
+				fprintf(asm_file,"\tLOAD_CONST %d\n", (yyvsp[0].sToken));
+				(yyval.obj) = pInt;
 				}
-#line 1806 "trabalho.tab.c" /* yacc.c:1646  */
+#line 1797 "trabalho.tab.c" /* yacc.c:1646  */
     break;
 
 
-#line 1810 "trabalho.tab.c" /* yacc.c:1646  */
+#line 1801 "trabalho.tab.c" /* yacc.c:1646  */
       default: break;
     }
   /* User semantic actions sometimes alter yychar, and that requires
@@ -2034,7 +2025,7 @@ yyreturn:
 #endif
   return yyresult;
 }
-#line 368 "trabalho.y" /* yacc.c:1906  */
+#line 359 "trabalho.y" /* yacc.c:1906  */
 
 int main( void )
 {

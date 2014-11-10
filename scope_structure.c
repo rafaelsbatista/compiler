@@ -16,7 +16,7 @@ int endBlock(){
 pobject Define (int aName){
 	pobject obj = (pobject)malloc(sizeof(object));
 	
-	obj->nName = aName;
+	obj->name = aName;
 	obj->pNext = NULL;
 	
 	if(SymbolTable[nCurrentLevel] == NULL){
@@ -34,7 +34,7 @@ pobject Search(int aName){
 	pobject obj = SymbolTable[nCurrentLevel];
 	
 	while(obj != 0){
-		if(obj->nName == aName)
+		if(obj->name == aName)
 		{
 			break;
 		}else{
@@ -51,7 +51,7 @@ pobject Find (int aName){
 	for(i = nCurrentLevel ; i>= 0 ; i--){
 		obj = SymbolTable[i];
 		while(obj!=0){
-			if(obj->nName == aName) break;
+			if(obj->name == aName) break;
 			else obj = obj->pNext;
 		}
 		if(obj != 0) break;
@@ -63,23 +63,25 @@ pobject createType(int vType){
 	pobject p = (pobject)malloc(sizeof(object));
 	pattr att = (pattr)malloc(sizeof(attr));
 	att->type = vType;
-	p->attribute = att;
+	//p->attribute = att;
 	return p;
 }
 
 int CheckTypes(pobject t1, pobject t2){
-	printf("t1\n");
-	printf("t1 %d\n",t1->attribute->type);
-	printf("t2\n");
-	printf("t2 %d\n",t2->attribute->type);
-	if(t1->attribute->type == t2->attribute->type) return 1;
+	if(t1 == t2) return 1;
+	else if(t1 == t2->_.Var.pType) return 1;
+	else if(t1->_.Var.pType == t2) return 1;
+	else if(t1->_.Var.pType == t2->_.Var.pType) return 1;
 	else if (t1->eKind == UNIVERSAL_ || t2->eKind == UNIVERSAL_) return 1;
 	else return 0;
 }
 
-int CheckType(pobject t1, int t2){
+
+
+
+/*int CheckType(pobject t1, int t2){
 	
-	if(t1->attribute->type == t2){ printf("AAAAAAAA 1\n");return 1;}
+	if(t1 == t2){ printf("AAAAAAAA 1\n");return 1;}
 	else if (t1->eKind == UNIVERSAL_){printf("AAAAAAAA 2\n"); return 1;}
 	else {printf("AAAAAAAA 3\n");return 0;}
-}
+}*/

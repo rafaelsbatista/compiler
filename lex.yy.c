@@ -519,7 +519,8 @@ char *yytext;
 #include "trabalho.tab.h"
 #include "sToken.h"
 #include "structure.h"
-#line 523 "lex.yy.c"
+#include "attribute.h"
+#line 524 "lex.yy.c"
 
 #define INITIAL 0
 
@@ -728,10 +729,10 @@ YY_DECL
 		}
 
 	{
-#line 7 "trabalho.l"
+#line 8 "trabalho.l"
 
 
-#line 735 "lex.yy.c"
+#line 736 "lex.yy.c"
 
 	while ( 1 )		/* loops until end-of-file is reached */
 		{
@@ -790,220 +791,235 @@ do_action:	/* This label is used only to access EOF actions. */
 
 case 1:
 YY_RULE_SETUP
-#line 9 "trabalho.l"
+#line 10 "trabalho.l"
 return T_EQ;
 	YY_BREAK
 case 2:
 YY_RULE_SETUP
-#line 10 "trabalho.l"
+#line 11 "trabalho.l"
 return T_NEQ;
 	YY_BREAK
 case 3:
 YY_RULE_SETUP
-#line 11 "trabalho.l"
+#line 12 "trabalho.l"
 return T_LT;
 	YY_BREAK
 case 4:
 YY_RULE_SETUP
-#line 12 "trabalho.l"
+#line 13 "trabalho.l"
 return T_GT;
 	YY_BREAK
 case 5:
 YY_RULE_SETUP
-#line 13 "trabalho.l"
+#line 14 "trabalho.l"
 return T_LE;
 	YY_BREAK
 case 6:
 YY_RULE_SETUP
-#line 14 "trabalho.l"
+#line 15 "trabalho.l"
 return T_GE;
 	YY_BREAK
 case 7:
 YY_RULE_SETUP
-#line 15 "trabalho.l"
+#line 16 "trabalho.l"
 return T_EQEQ;
 	YY_BREAK
 case 8:
 YY_RULE_SETUP
-#line 16 "trabalho.l"
+#line 17 "trabalho.l"
 return T_AND;
 	YY_BREAK
 case 9:
 YY_RULE_SETUP
-#line 17 "trabalho.l"
+#line 18 "trabalho.l"
 return T_OR;
 	YY_BREAK
 case 10:
 YY_RULE_SETUP
-#line 18 "trabalho.l"
+#line 19 "trabalho.l"
 {printf("mais\n"); return T_PLUS;}
 	YY_BREAK
 case 11:
 YY_RULE_SETUP
-#line 19 "trabalho.l"
+#line 20 "trabalho.l"
 return T_MINUS;
 	YY_BREAK
 case 12:
 YY_RULE_SETUP
-#line 20 "trabalho.l"
+#line 21 "trabalho.l"
 {printf("vezes\n"); return T_TIMES;}
 	YY_BREAK
 case 13:
 YY_RULE_SETUP
-#line 21 "trabalho.l"
+#line 22 "trabalho.l"
 return T_DIVIDE;
 	YY_BREAK
 case 14:
 YY_RULE_SETUP
-#line 22 "trabalho.l"
+#line 23 "trabalho.l"
 return T_COLON;
 	YY_BREAK
 case 15:
 YY_RULE_SETUP
-#line 23 "trabalho.l"
+#line 24 "trabalho.l"
 return T_SEMICOLON;
 	YY_BREAK
 case 16:
 YY_RULE_SETUP
-#line 24 "trabalho.l"
+#line 25 "trabalho.l"
 return T_COMMA;
 	YY_BREAK
 case 17:
 YY_RULE_SETUP
-#line 25 "trabalho.l"
+#line 26 "trabalho.l"
 return T_LEFTBRACES;
 	YY_BREAK
 case 18:
 YY_RULE_SETUP
-#line 26 "trabalho.l"
+#line 27 "trabalho.l"
 return T_RIGHTBRACES;
 	YY_BREAK
 case 19:
 YY_RULE_SETUP
-#line 27 "trabalho.l"
+#line 28 "trabalho.l"
 return T_NOT;
 	YY_BREAK
 case 20:
 YY_RULE_SETUP
-#line 29 "trabalho.l"
+#line 30 "trabalho.l"
 return R_INTEGER;
 	YY_BREAK
 case 21:
 YY_RULE_SETUP
-#line 30 "trabalho.l"
+#line 31 "trabalho.l"
 return R_CHAR;
 	YY_BREAK
 case 22:
 YY_RULE_SETUP
-#line 31 "trabalho.l"
+#line 32 "trabalho.l"
 return R_BOOLEAN;
 	YY_BREAK
 case 23:
 YY_RULE_SETUP
-#line 32 "trabalho.l"
+#line 33 "trabalho.l"
 return R_STRING;
 	YY_BREAK
 case 24:
 YY_RULE_SETUP
-#line 33 "trabalho.l"
+#line 34 "trabalho.l"
 return R_VAR;
 	YY_BREAK
 case 25:
 YY_RULE_SETUP
-#line 34 "trabalho.l"
+#line 35 "trabalho.l"
 return R_THEN;
 	YY_BREAK
 case 26:
 YY_RULE_SETUP
-#line 35 "trabalho.l"
+#line 36 "trabalho.l"
 return R_IF;
 	YY_BREAK
 case 27:
 YY_RULE_SETUP
-#line 36 "trabalho.l"
+#line 37 "trabalho.l"
 return R_ELSE;
 	YY_BREAK
 case 28:
 YY_RULE_SETUP
-#line 37 "trabalho.l"
+#line 38 "trabalho.l"
 {printf("while\n"); return R_WHILE;} 
 	YY_BREAK
 case 29:
 YY_RULE_SETUP
-#line 38 "trabalho.l"
+#line 39 "trabalho.l"
 return R_DO;
 	YY_BREAK
 case 30:
 YY_RULE_SETUP
-#line 39 "trabalho.l"
+#line 40 "trabalho.l"
 return R_BREAK;
 	YY_BREAK
 case 31:
 YY_RULE_SETUP
-#line 40 "trabalho.l"
-return R_TRUE;
+#line 41 "trabalho.l"
+{
+			
+				yylval.sToken = addBooleanConst(1);
+				return R_TRUE;
+			}
 	YY_BREAK
 case 32:
 YY_RULE_SETUP
-#line 41 "trabalho.l"
-return R_FALSE;
+#line 46 "trabalho.l"
+{
+			
+				yylval.sToken = addBooleanConst(0);
+				return R_FALSE;
+			}
 	YY_BREAK
 case 33:
 YY_RULE_SETUP
-#line 43 "trabalho.l"
+#line 52 "trabalho.l"
 {
-			yylval.character = (yytext + 1)[0];
+			printf("adicionou char\n");
+			yylval.sToken = addCharConst((yytext + 1)[0]);
+			printf("saiu adicionou char\n");
 			return T_CHAR;
 		}
 	YY_BREAK
 case 34:
 /* rule 34 can match eol */
 YY_RULE_SETUP
-#line 47 "trabalho.l"
+#line 58 "trabalho.l"
 {
-			yylval.string = (char*) malloc(sizeof(char)*(strlen(yytext-2)));
-			strncpy(yylval.string,(yytext+1),strlen(yytext-2));
-			yylval.string[ strlen(yylval.string)-1 ] = '\0';
+			printf("pegando string/n");
+			char* string;
+			string = (char*) malloc(sizeof(char)*(strlen(yytext-2)));
+			strncpy(string,(yytext+1),strlen(yytext-2));
+			string[ strlen(string)-1 ] = '\0';
+			yylval.sToken = addStringConst("rafael");
+			
+			printf("pegando string saindo/n");
 			return T_STRING;
 		}
 	YY_BREAK
 case 35:
 YY_RULE_SETUP
-#line 53 "trabalho.l"
+#line 69 "trabalho.l"
 {
-			yylval.id = (struct identificador*)malloc(sizeof(identificador));
-			strncpy(yylval.id->id,yytext,200);
-			//printf("ID = %s\n",yylval.id->id);
-			yylval.id->sToken = searchName(yylval.id->id);
-			//printf("token secundario %d id %s\n",yylval.id->sToken,yylval.id->id);
+			char *identificador = (char*)malloc(sizeof(char)*200);
+			strncpy(identificador,yytext,200);
+			yylval.sToken = searchName(identificador);
 			return T_ID;
 		}
 	YY_BREAK
 case 36:
 YY_RULE_SETUP
-#line 61 "trabalho.l"
+#line 75 "trabalho.l"
 {
-			yylval.integer = atoi( yytext );
+			int integer;
+			integer = atoi( yytext );
+			yylval.sToken = addIntConst(integer);
 			return T_NUMBER;
 		}
 	YY_BREAK
 case 37:
 YY_RULE_SETUP
-#line 65 "trabalho.l"
+#line 81 "trabalho.l"
 
 	YY_BREAK
 case 38:
 /* rule 38 can match eol */
 YY_RULE_SETUP
-#line 66 "trabalho.l"
+#line 82 "trabalho.l"
 
 	YY_BREAK
 case 39:
 YY_RULE_SETUP
-#line 67 "trabalho.l"
+#line 83 "trabalho.l"
 ECHO;
 	YY_BREAK
-#line 1007 "lex.yy.c"
+#line 1023 "lex.yy.c"
 case YY_STATE_EOF(INITIAL):
 	yyterminate();
 
@@ -1998,7 +2014,7 @@ void yyfree (void * ptr )
 
 #define YYTABLES_NAME "yytables"
 
-#line 67 "trabalho.l"
+#line 83 "trabalho.l"
 
 
 

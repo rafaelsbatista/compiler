@@ -4,6 +4,7 @@
 	#include "trabalho.tab.h"
 	#include "sToken.h"
 	#include "structure.h"
+	#include "attribute.h"
 %%
 
 "=" 		return T_EQ;
@@ -37,29 +38,44 @@
 "while"		{printf("while\n"); return R_WHILE;} 
 "do" 		return R_DO;
 "break"     return R_BREAK;
-"true"		return R_TRUE;
-"false" 	return R_FALSE;
+"true"		{
+			
+				yylval.sToken = addBooleanConst(1);
+				return R_TRUE;
+			}
+"false" 	{
+			
+				yylval.sToken = addBooleanConst(0);
+				return R_FALSE;
+			}
 
 '[a-zA-Z]' {
-			yylval.character = (yytext + 1)[0];
+			printf("adicionou char\n");
+			yylval.sToken = addCharConst((yytext + 1)[0]);
+			printf("saiu adicionou char\n");
 			return T_CHAR;
 		}
 ["][^"]*["] {
-			yylval.string = (char*) malloc(sizeof(char)*(strlen(yytext-2)));
-			strncpy(yylval.string,(yytext+1),strlen(yytext-2));
-			yylval.string[ strlen(yylval.string)-1 ] = '\0';
+			printf("pegando string/n");
+			char* string;
+			string = (char*) malloc(sizeof(char)*(strlen(yytext-2)));
+			strncpy(string,(yytext+1),strlen(yytext-2));
+			string[ strlen(string)-1 ] = '\0';
+			yylval.sToken = addStringConst("rafael");
+			
+			printf("pegando string saindo/n");
 			return T_STRING;
 		}
 [a-zA-Z][a-zA-Z0-9]* {
-			yylval.id = (struct identificador*)malloc(sizeof(identificador));
-			strncpy(yylval.id->id,yytext,200);
-			//printf("ID = %s\n",yylval.id->id);
-			yylval.id->sToken = searchName(yylval.id->id);
-			//printf("token secundario %d id %s\n",yylval.id->sToken,yylval.id->id);
+			char *identificador = (char*)malloc(sizeof(char)*200);
+			strncpy(identificador,yytext,200);
+			yylval.sToken = searchName(identificador);
 			return T_ID;
 		}
 [0-9]+ 	{
-			yylval.integer = atoi( yytext );
+			int integer;
+			integer = atoi( yytext );
+			yylval.sToken = addIntConst(integer);
 			return T_NUMBER;
 		}
 [ \t]+

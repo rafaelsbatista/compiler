@@ -10,10 +10,9 @@ typedef enum { NO_KIND_DEF_ = -1, VAR_, SCALAR_TYPE_, UNIVERSAL_} t_kind;
 
 typedef struct object
 {
-	int nName;
+	int name;
 	struct object *pNext;
 	t_kind eKind;
-	struct attr *attribute;
 	union{
 		struct{
 			struct object *pType;
@@ -24,6 +23,8 @@ typedef struct object
 static pobject SymbolTable[MAX_NEST_LEVEL];
 static pobject SymbolTableLast[MAX_NEST_LEVEL];
 static int nCurrentLevel = -1;
+
+
 
 int newBlock();
 
@@ -38,5 +39,5 @@ pobject Find (int aName);
 pobject createType(int vType);
 
 int CheckTypes(pobject t1, pobject t2);
-int CheckType(pobject t1, int t2);
+//int CheckType(pobject t1, int t2);
 #endif

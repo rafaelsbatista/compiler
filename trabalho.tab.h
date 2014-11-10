@@ -89,7 +89,7 @@ extern int yydebug;
 typedef union YYSTYPE YYSTYPE;
 union YYSTYPE
 {
-#line 19 "trabalho.y" /* yacc.c:1909  */
+#line 33 "trabalho.y" /* yacc.c:1909  */
 
 	int integer;
 	int boolean;
@@ -97,9 +97,10 @@ union YYSTYPE
 	struct identificador *id;
 	char *string;
 	int sToken;
+	struct object *obj;
 	int label;
 
-#line 103 "trabalho.tab.h" /* yacc.c:1909  */
+#line 104 "trabalho.tab.h" /* yacc.c:1909  */
 };
 # define YYSTYPE_IS_TRIVIAL 1
 # define YYSTYPE_IS_DECLARED 1

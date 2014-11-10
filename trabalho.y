@@ -15,6 +15,20 @@
 		return 0;
 	}
 	
+	object int_ = { -1, NULL, SCALAR_TYPE_};
+	pobject pInt = &int_;
+	
+	object char_ = { -1, NULL, SCALAR_TYPE_};
+	pobject pChar = &char_;
+	
+	object bool_ = { -1, NULL, SCALAR_TYPE_};
+	pobject pBool = &bool_;
+	
+	object string_ = { -1, NULL, SCALAR_TYPE_};
+	pobject pString = &string_;
+	
+	object universal_ = { -1, NULL, SCALAR_TYPE_};
+	pobject pUniversal = &universal_;
 %}
 %union {
 	int integer;
@@ -23,6 +37,7 @@
 	struct identificador *id;
 	char *string;
 	int sToken;
+	struct object *obj;
 	int label;
 }
 
@@ -44,10 +59,10 @@
 %token T_LEFTBRACES
 %token T_RIGHTBRACES
 %token T_NOT
-%token <character> T_CHAR
-%token <string> T_STRING
-%token <id> T_ID
-%token <integer> T_NUMBER
+%token <sToken> T_CHAR
+%token <sToken> T_STRING
+%token <sToken> T_ID
+%token <sToken> T_NUMBER
 
 %token R_INTEGER
 %token R_CHAR
@@ -60,10 +75,10 @@
 %token R_WHILE 
 %token R_DO
 %token R_BREAK
-%token <id> R_TRUE
-%token <id> R_FALSE
+%token <sToken> R_TRUE
+%token <sToken> R_FALSE
 
-%type <id> IDU IDD TP LI TRUE FALSE CHR NUM STR E F
+%type <obj> IDU IDD TP LI TRUE FALSE CHR NUM STR E F
 %type <label> MT ME MW
 %right R_THEN R_ELSE
 
@@ -87,13 +102,15 @@ DE:		DV
 ;
 
 DV:		R_VAR LI T_COLON TP T_SEMICOLON{
-			identificador *idt = $2;
-			while(idt != 0 && idt->obj->eKind == NO_KIND_DEF_){
-				idt->obj->eKind = VAR_;
-				idt->obj->attribute = (pattr)malloc(sizeof(attr));
-				idt->obj->attribute->type = $4->obj->attribute->type;
-				idt = idt->pNext;
+			printf("DEclarando variavel\n");
+			pobject ob = $2;
+			while(ob != 0 && ob->eKind == NO_KIND_DEF_){
+				ob->eKind = VAR_;
+				ob->_.Var.pType = $4;
+				ob = ob->pNext;
 			}
+			printf("saiu DEclarando variavel\n");
+			
 		}
 ;
 
@@ -105,21 +122,16 @@ LI:		LI T_COMMA IDD {addIdentificador($$,$1,$3);}
 ;
 
 TP:		R_INTEGER { 
-					identificador *idt = (struct identificador*)malloc(sizeof(struct identificador));
-					idt->obj = createType(INTEGER); 
-					$$ = idt;
+					$$ = pInt;
 					}	
-|		R_CHAR { identificador *idt = (struct identificador*)malloc(sizeof(struct identificador));
-					idt->obj = createType(CHARACTER); 
-					$$ = idt;
+|		R_CHAR { 
+					$$ = pChar;
 					}	
-|		R_BOOLEAN { identificador *idt = (struct identificador*)malloc(sizeof(struct identificador));
-					idt->obj = createType(BOOLEAN); 
-					$$ = idt;
+|		R_BOOLEAN { 
+					$$ = pBool;
 					}	
-|		R_STRING { identificador *idt = (struct identificador*)malloc(sizeof(struct identificador));
-					idt->obj = createType(STRING); 
-					$$ = idt;
+|		R_STRING { 
+					$$ = pString;
 					}	
 ;
 
@@ -152,106 +164,109 @@ MW: {
 }
 ;
 S:		R_IF E R_THEN MT S {
-			if(!CheckType($2->obj,BOOLEAN)) {yyerror("Erro if\n");YYERROR;}
-			printf("entrou no if\n");
+			if(!CheckTypes($2,pBool)) {yyerror("Erro if\n");YYERROR;}
+			//printf("entrou no if\n");
 			fprintf(asm_file,"L%d:\n",$4);
 			
 		}
 |		R_IF E R_THEN MT S R_ELSE ME S {
-			if(CheckType($2->obj,BOOLEAN) != 1) {yyerror("Erro if\n");YYERROR;}
-			printf("entrou no if then else tipo do 2 %d %d  <- BOOLEAN \n",$2->obj->attribute->type,BOOLEAN);
+			if(CheckTypes($2,pBool) != 1) {yyerror("Erro if\n");YYERROR;}
+			//printf("entrou no if then else tipo do 2 %d %d  <- BOOLEAN \n",$2->obj->attribute->type,BOOLEAN);
 			fprintf(asm_file,"L%d:\n",$7);
 		}
 |		R_WHILE MW E R_DO MT S {
-			if(!CheckType($3->obj,BOOLEAN)) {yyerror("Erro while\n");YYERROR;}
+			if(!CheckTypes($3,pBool)) {yyerror("Erro while\n");YYERROR;}
 			
 			fprintf(asm_file,"\tJMP_BW L%d\nL%d\n",$2,$5);
 		}
 |		B
 |		F MA T_EQ E T_SEMICOLON {
 			printf("Testando igual \n");
-			if(!CheckTypes($1->obj,$4->obj)) {
+			if(!CheckTypes($1->_.Var.pType,$4)) {
+				printf(" Erro tipo 1 %d , tipo 2 %d\n", $1->eKind,$4->eKind);
 				yyerror("Erro atibuicao\n");
 				YYERROR;
 			}
-			fprintf(asm_file,"\tSTORE_VAR %d\n",$1->sToken);
+			int i  = 32;
+			fprintf(asm_file,"\tSTORE_VAR %d\n",i);
+			printf("saiu\n");
 		}
 |		E T_SEMICOLON
 |		R_BREAK T_SEMICOLON
 |		DV
 ;
 
-MA:	{fprintf(asm_file,"\tDUP\n");}
+MA:	{
+
+				printf("rope rope aaaaaaaaaaa\n");
+		fprintf(asm_file,"\tDUP\n");}
 ;
-E:		E T_AND F { if(!CheckType($1->obj,BOOLEAN)) {yyerror("Erro and\n");YYERROR;}
-				    $$ = (struct identificador*)malloc(sizeof(struct identificador));
-					$$->obj = createType(BOOLEAN);
+E:		E T_AND F { if(!CheckTypes($1,$3)) {yyerror("Erro and\n");YYERROR;}
+					if(!CheckTypes($1,pBool)) {yyerror("Erro and 2\n");YYERROR;}
+					$$ = pBool;
 					
 					fprintf(asm_file,"\tAND\n");
 				  }
-|		E T_OR F { if(!CheckType($1->obj,BOOLEAN)) {yyerror("Erro or\n");YYERROR;}
-				    $$ = (struct identificador*)malloc(sizeof(struct identificador));
-					$$->obj = createType(BOOLEAN);
+|		E T_OR F { if(!CheckTypes($1,$3)) {yyerror("Erro or\n");YYERROR;}
+				   if(!CheckTypes($1,pBool)) {yyerror ("Erro or 2\n");YYERROR;}
+					$$ = pBool;
 					fprintf(asm_file,"\tOR\n");
 				  }
-|		E T_LT F { if(!CheckTypes($1->obj,$3->obj)) {yyerror("Erro less than\n");YYERROR;}
-				    $$ = (struct identificador*)malloc(sizeof(struct identificador));
-					$$->obj = createType(BOOLEAN);
+|		E T_LT F { if(!CheckTypes($1,$3)) {yyerror("Erro less than\n");YYERROR;}
+				    $$ = pBool;
 					fprintf(asm_file,"\tLT\n");
 				  }
-|		E T_GT F { if(!CheckTypes($1->obj,$3->obj)) {yyerror("Erro greater than\n");YYERROR;}
-				    $$ = (struct identificador*)malloc(sizeof(struct identificador));
-					$$->obj = createType(BOOLEAN);
+|		E T_GT F { if(!CheckTypes($1,$3)) {yyerror("Erro greater than\n");YYERROR;}
+				    $$ = pBool;
 					fprintf(asm_file,"\tGT\n");
 				  }
-|		E T_LE F { if(!CheckTypes($1->obj,$3->obj)) {yyerror("Erro less equal\n");YYERROR;}
-				    $$ = (struct identificador*)malloc(sizeof(struct identificador));
-					$$->obj = createType(BOOLEAN);
+|		E T_LE F { 
+					if(!CheckTypes($1,$3)) {yyerror("Erro less equal\n");YYERROR;}
+				    $$ = pBool;
 					fprintf(asm_file,"\tLE\n");
 				  }
-|		E T_GE F { if(!CheckTypes($1->obj,$3->obj)) {yyerror("Erro greater equal\n");YYERROR;}
-				    $$ = (struct identificador*)malloc(sizeof(struct identificador));
-					$$->obj = createType(BOOLEAN);
+|		E T_GE F { 	
+					if(!CheckTypes($1,$3)) {yyerror("Erro greater equal\n");YYERROR;}
+				    $$ = pBool;
 					fprintf(asm_file,"\tGE\n");
 				  }
-|		E T_EQEQ F { if(!CheckTypes($1->obj,$3->obj)) {yyerror("Erro equal equal\n");YYERROR;}
-				    $$ = (struct identificador*)malloc(sizeof(struct identificador));
-					$$->obj = createType(BOOLEAN);
+|		E T_EQEQ F { 
+					if(!CheckTypes($1,$3)) {yyerror("Erro equal equal\n");YYERROR;}
+				    $$ = pBool;
 					fprintf(asm_file,"\tEQ\n");
 				  }
 |		E T_NEQ F {
-					if(!CheckTypes($1->obj,$3->obj)) {yyerror("Erro not equal\n");YYERROR;}
-				    $$ = (struct identificador*)malloc(sizeof(struct identificador));
-					$$->obj = createType(BOOLEAN);
+					if(!CheckTypes($1,$3)) {yyerror("Erro not equal\n");YYERROR;}
+				    $$  = pBool;
 					fprintf(asm_file,"\tNE\n");
 				  }
-|		E T_PLUS F{ if(!CheckTypes($1->obj,$3->obj)) {yyerror("Erro plus\n");YYERROR;}
-					if(!CheckType($1->obj,INTEGER) && !CheckType($1->obj,STRING)) yyerror("Erro tipo plus\n");
-				    $$ = (struct identificador*)malloc(sizeof(struct identificador));
-					if(CheckType($1->obj,INTEGER)) $$->obj = createType(INTEGER);
-					else $$->obj = createType(STRING);
+|		E T_PLUS F{ 
+					if(!CheckTypes($1,$3)) {yyerror("Erro plus\n");YYERROR;}
+					if(!CheckTypes($1,pInt) && !CheckTypes($1,pString)) yyerror("Erro tipo plus\n");
+				    if(CheckTypes($1,pInt)) $$ = pInt;
+					else $$ = pString;
 					fprintf(asm_file,"\tADD\n");
 				  }
-|		E T_MINUS F{ if(!CheckTypes($1->obj,$3->obj)) {yyerror("Erro minus\n");YYERROR;}
-					if(!CheckType($1->obj,INTEGER)) {yyerror("Erro tipo minus\n");YYERROR;}
-				    $$ = (struct identificador*)malloc(sizeof(struct identificador));
-					if(CheckType($1->obj,INTEGER)) $$->obj = createType(INTEGER);
-					else $$->obj = createType(STRING);
+|		E T_MINUS F{ 
+					if(!CheckTypes($1,$3)) {yyerror("Erro minus\n");YYERROR;}
+					if(!CheckTypes($1,pInt)) {yyerror("Erro tipo minus\n");YYERROR;}
+				    $$ = pInt;
 					fprintf(asm_file,"\tSUB\n");
 				  }
-|		E T_TIMES F{ if(!CheckTypes($1->obj,$3->obj)) {yyerror("Erro times\n");YYERROR;}
-					if(!CheckType($1->obj,INTEGER)) {yyerror("Erro tipo Times\n");YYERROR;}
-				    $$ = (struct identificador*)malloc(sizeof(struct identificador));
-					$$->obj = createType(INTEGER);
+|		E T_TIMES F{ 
+					if(!CheckTypes($1,$3)) {yyerror("Erro times\n");YYERROR;}
+					if(!CheckTypes($1,pInt)) {yyerror("Erro tipo Times\n");YYERROR;}
+				    $$ = pInt;
 					fprintf(asm_file,"\tMUL\n");
 				  }
-|		E T_DIVIDE F{ if(!CheckTypes($1->obj,$3->obj)) {yyerror("Erro divide\n");YYERROR;}
-					if(!CheckType($1->obj,INTEGER)) {yyerror("Erro divide plus\n");YYERROR;}
-				    $$ = (struct identificador*)malloc(sizeof(struct identificador));
-					$$->obj = createType(INTEGER);
+|		E T_DIVIDE F{ 
+					if(!CheckTypes($1,$3)) {yyerror("Erro divide\n");YYERROR;}
+					if(!CheckTypes($1,pInt)) {yyerror("Erro divide plus\n");YYERROR;}
+				    $$ = pInt;
 					fprintf(asm_file,"\tDIV\n");
 				  }
-|		F {$$ = $1;}
+|		F {
+			printf("f vira e\n");$$ = $1;}
 ;
 
 F:		T_NOT F {$$ = $2;}
@@ -260,8 +275,11 @@ F:		T_NOT F {$$ = $2;}
 |		CHR {$$ = $1;}
 |		STR { $$ = $1;}
 |		NUM {$$ = $1;}
-|		IDU { $$ = $1;
-				fprintf(asm_file,"\tLOAD_VAR %d\n",$1->sToken);
+|		IDU { 
+				$$ = $1;
+				printf("rope rope\n");
+				fprintf(asm_file,"\tLOAD_VAR %d\n",$1->name);
+				printf("rope rope saiu\n");
 			}
 ;
 
@@ -275,93 +293,66 @@ NBI: {
 	}
 ;
 
-IDU: T_ID { identificador *idt = (struct identificador*)malloc(sizeof(struct identificador));
-			//printf("utilizacao da variavel %s token %d*\n",$1->id,$1->sToken);
+IDU: T_ID { 
+			printf("uso variavel\n");
 			pobject p = (pobject)malloc(sizeof(object));
-			if((p=Find($1->sToken)) == 0){
+			if((p=Find($1)) == 0){
 				yyerror("Erro variavel nao declarada\n");
 				YYERROR;
-				p = Define($1->sToken);
+				p = Define($1);
 			}
 			p->eKind = NO_KIND_DEF_;
-			$$ = idt;
-			strcpy($$->id,$1->id);
-			$$->sToken = $1->sToken;
-			$$->obj = p;
+			p->name = $1;
+			$$ = p;
+			printf("uso variavel saida\n");
 			}
 ;
 
-IDD: T_ID { identificador *idt = (struct identificador*)malloc(sizeof(struct identificador));
-			//printf("Definindo varivael name %s token %d\n", $1->id,$1->sToken);
+IDD: T_ID { 
 			pobject p = (pobject)malloc(sizeof(object));
-			printf("Segunda parte\n");
-			if( (p=Search($1->sToken)) != 0){
+			if( (p=Search($1)) !=0 ){
 				yyerror("Erro declaração de variavel repetida\n");
 				YYERROR;
 			} else {
-				p = Define( $1->sToken );
+				p = Define( $1 );
 			}
-			$$ = idt;
 			p->eKind = NO_KIND_DEF_;
-			strcpy($$->id,$1->id);
-			$$->sToken = $1->sToken;
-			$$->obj = p;
+			p->name = $1;
+			$$ = p;
 }
 ;
 
-TRUE:	R_TRUE { identificador *idt = (struct identificador*)malloc(sizeof(struct identificador));
-				idt->obj = (pobject)malloc(sizeof(object));
-				idt->obj->attribute = (pattr)malloc(sizeof(attr));
-				idt->obj->attribute->booleanVal = 1;
-				int tokenSecundario = addBooleanConst(1);
-				fprintf(asm_file,"\tLOAD_CONST %d\n", tokenSecundario);
-				idt->obj->attribute->type = BOOLEAN;
-				$$ = idt;
+TRUE:	R_TRUE { 
+				fprintf(asm_file,"\tLOAD_CONST %d\n", $1);
+				$$ = pBool;
 				}
 ;
 
-FALSE:	R_FALSE { identificador *idt = (struct identificador*)malloc(sizeof(struct identificador));
-				idt->obj = (pobject)malloc(sizeof(object));
-				idt->obj->attribute = (pattr)malloc(sizeof(attr));
-				idt->obj->attribute->booleanVal = 0;
-				int tokenSecundario = addBooleanConst(0);
-				fprintf(asm_file,"\tLOAD_CONST %d\n", tokenSecundario);
-				idt->obj->attribute->type = BOOLEAN;
-				$$ = idt;
+FALSE:	R_FALSE { 
+				fprintf(asm_file,"\tLOAD_CONST %d\n", $1);
+				$$ = pBool;
 				}
 ;
 
-CHR:	T_CHAR { identificador *idt = (struct identificador*)malloc(sizeof(struct identificador));
-				idt->obj = (pobject)malloc(sizeof(object));
-				idt->obj->attribute = (pattr)malloc(sizeof(attr));
-				idt->obj->attribute->charVal = $1;
-				int tokenSecundario = addCharConst($1);
-				fprintf(asm_file,"\tLOAD_CONST %d\n", tokenSecundario);
-				idt->obj->attribute->type = CHARACTER;
-				$$ = idt;
+CHR:	T_CHAR { 
+				fprintf(asm_file,"\tLOAD_CONST %d\n", $1);
+				printf("load char\n");
+				$$ = pChar;
 				}
 ;
 
-STR:	T_STRING { 
-				identificador *idt = (struct identificador*)malloc(sizeof(struct identificador));
-				idt->obj = (pobject)malloc(sizeof(object));
-				idt->obj->attribute = (pattr)malloc(sizeof(attr));
-				idt->obj->attribute->stringVal = $1;
-				int tokenSecundario = addStringConst($1);
-				fprintf(asm_file,"\tLOAD_CONST %d\n", tokenSecundario);
-				idt->obj->attribute->type = STRING;
-				$$ = idt;
+STR:	T_STRING {
+				printf("String entrou\n");
+				fprintf(asm_file,"\tLOAD_CONST %d\n", $1);
+				$$ = pString;
+				
+				printf("String entrou SAIU\n");
 				}
 ;
 
-NUM:	T_NUMBER { identificador *idt = (struct identificador*)malloc(sizeof(struct identificador));
-				idt->obj = (pobject)malloc(sizeof(object));
-				idt->obj->attribute = (pattr)malloc(sizeof(attr));
-				idt->obj->attribute->intVal = $1;
-				int tokenSecundario = addIntConst($1);
-				fprintf(asm_file,"\tLOAD_CONST %d\n", tokenSecundario);
-				idt->obj->attribute->type = INTEGER;
-				$$ = idt;
+NUM:	T_NUMBER { 
+				fprintf(asm_file,"\tLOAD_CONST %d\n", $1);
+				$$ = pInt;
 				}
 ;
 

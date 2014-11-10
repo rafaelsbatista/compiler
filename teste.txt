@@ -7,7 +7,6 @@ var ab:char;
 	ab = 'c';
 	x = 2;
 	y = 3 + 2;
-	var ab:char;
 	z = "rafael";
 	ab = 'o';
 	var abC:char;
