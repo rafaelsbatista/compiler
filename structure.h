@@ -12,5 +12,6 @@ typedef struct identificador
 }identificador;
 
 
+void addIdentificador(object *final, object *lista, object *novo);
 
 #endif

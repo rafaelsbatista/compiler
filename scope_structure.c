@@ -2,12 +2,14 @@
 #include <stdio.h>
 
 int newBlock(){
+	printf("novo block?\n");
 	SymbolTable[++nCurrentLevel] = NULL;
 	SymbolTableLast[nCurrentLevel] = NULL;
 	return nCurrentLevel;
 }
 
 int endBlock(){
+	printf("End block\n");
 	return --nCurrentLevel;
 }
 
@@ -75,14 +77,7 @@ int CheckTypes(pobject t1, pobject t2){
 }
 
 
-void addIdentificador(object *final, object *lista, object *novo){
-	if(lista == 0){
-		final = novo;
-	}else{
-		novo->pNext = lista;
-		final = novo;
-	}
-}
+
 
 /*int CheckType(pobject t1, int t2){
 	

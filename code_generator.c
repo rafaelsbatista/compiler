@@ -16,3 +16,8 @@ void finalizeCodeFile(void)
 
 	printf("Codigo gerado com sucesso! [code.asm]\n");
 }
+
+void ifStatement(identificador *idt1,identificador *idt2){
+	
+	fprintf(asm_file, "%s", "\n-- end");
+}

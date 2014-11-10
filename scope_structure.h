@@ -38,8 +38,6 @@ pobject Find (int aName);
 
 pobject createType(int vType);
 
-void addIdentificador(object *final, object *lista, object *novo);
-
 int CheckTypes(pobject t1, pobject t2);
 //int CheckType(pobject t1, int t2);
 #endif
