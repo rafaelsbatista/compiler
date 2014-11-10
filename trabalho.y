@@ -1,7 +1,6 @@
 %{
 	#include <stdio.h>
 	#include <string.h>
-	#include "structure.h"
 	#include "scope_structure.h"
 	#include "attribute.h"
 	#include "code_generator.h"
@@ -102,21 +101,18 @@ DE:		DV
 ;
 
 DV:		R_VAR LI T_COLON TP T_SEMICOLON{
-			printf("DEclarando variavel\n");
 			pobject ob = $2;
 			while(ob != 0 && ob->eKind == NO_KIND_DEF_){
 				ob->eKind = VAR_;
 				ob->_.Var.pType = $4;
 				ob = ob->pNext;
 			}
-			printf("saiu DEclarando variavel\n");
 			
 		}
 ;
 
 LI:		LI T_COMMA IDD {addIdentificador($$,$1,$3);}
 |		IDD {
-		//printf("LI\n");
 		addIdentificador($$,0,$1);
 		}
 ;
@@ -165,13 +161,11 @@ MW: {
 ;
 S:		R_IF E R_THEN MT S {
 			if(!CheckTypes($2,pBool)) {yyerror("Erro if\n");YYERROR;}
-			//printf("entrou no if\n");
 			fprintf(asm_file,"L%d:\n",$4);
 			
 		}
 |		R_IF E R_THEN MT S R_ELSE ME S {
 			if(CheckTypes($2,pBool) != 1) {yyerror("Erro if\n");YYERROR;}
-			//printf("entrou no if then else tipo do 2 %d %d  <- BOOLEAN \n",$2->obj->attribute->type,BOOLEAN);
 			fprintf(asm_file,"L%d:\n",$7);
 		}
 |		R_WHILE MW E R_DO MT S {
@@ -181,14 +175,11 @@ S:		R_IF E R_THEN MT S {
 		}
 |		B
 |		F MA T_EQ E T_SEMICOLON {
-			printf("Testando igual \n");
 			if(!CheckTypes($1->_.Var.pType,$4)) {
-				printf(" Erro tipo 1 %d , tipo 2 %d\n", $1->eKind,$4->eKind);
 				yyerror("Erro atibuicao\n");
 				YYERROR;
 			}
 			fprintf(asm_file,"\tSTORE_VAR %d\n",$1->name);
-			printf("saiu\n");
 		}
 |		E T_SEMICOLON
 |		R_BREAK T_SEMICOLON
@@ -196,8 +187,6 @@ S:		R_IF E R_THEN MT S {
 ;
 
 MA:	{
-
-				printf("rope rope aaaaaaaaaaa\n");
 		fprintf(asm_file,"\tDUP\n");}
 ;
 E:		E T_AND F { if(!CheckTypes($1,$3)) {yyerror("Erro and\n");YYERROR;}
@@ -330,17 +319,14 @@ FALSE:	R_FALSE {
 
 CHR:	T_CHAR { 
 				fprintf(asm_file,"\tLOAD_CONST %d\n", $1);
-				printf("load char\n");
 				$$ = pChar;
 				}
 ;
 
 STR:	T_STRING {
-				printf("String entrou\n");
 				fprintf(asm_file,"\tLOAD_CONST %d\n", $1);
 				$$ = pString;
 				
-				printf("String entrou SAIU\n");
 				}
 ;
 
