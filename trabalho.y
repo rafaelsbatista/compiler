@@ -187,8 +187,7 @@ S:		R_IF E R_THEN MT S {
 				yyerror("Erro atibuicao\n");
 				YYERROR;
 			}
-			int i  = 32;
-			fprintf(asm_file,"\tSTORE_VAR %d\n",i);
+			fprintf(asm_file,"\tSTORE_VAR %d\n",$1->name);
 			printf("saiu\n");
 		}
 |		E T_SEMICOLON
@@ -265,8 +264,7 @@ E:		E T_AND F { if(!CheckTypes($1,$3)) {yyerror("Erro and\n");YYERROR;}
 				    $$ = pInt;
 					fprintf(asm_file,"\tDIV\n");
 				  }
-|		F {
-			printf("f vira e\n");$$ = $1;}
+|		F {$$ = $1;}
 ;
 
 F:		T_NOT F {$$ = $2;}
@@ -277,9 +275,7 @@ F:		T_NOT F {$$ = $2;}
 |		NUM {$$ = $1;}
 |		IDU { 
 				$$ = $1;
-				printf("rope rope\n");
 				fprintf(asm_file,"\tLOAD_VAR %d\n",$1->name);
-				printf("rope rope saiu\n");
 			}
 ;
 
@@ -294,7 +290,6 @@ NBI: {
 ;
 
 IDU: T_ID { 
-			printf("uso variavel\n");
 			pobject p = (pobject)malloc(sizeof(object));
 			if((p=Find($1)) == 0){
 				yyerror("Erro variavel nao declarada\n");
@@ -304,7 +299,6 @@ IDU: T_ID {
 			p->eKind = NO_KIND_DEF_;
 			p->name = $1;
 			$$ = p;
-			printf("uso variavel saida\n");
 			}
 ;
 
