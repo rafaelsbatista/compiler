@@ -66,10 +66,8 @@
 
 	#include <stdio.h>
 	#include <string.h>
-	#include "structure.h"
 	#include "scope_structure.h"
 	#include "attribute.h"
-	#include "code_generator.h"
 	
 	FILE* asm_file;
 	
@@ -79,7 +77,7 @@
 		printf("bison-- error %s\n",s);
 		return 0;
 	}
-	
+	int varCount = 0;
 	object int_ = { -1, NULL, SCALAR_TYPE_};
 	pobject pInt = &int_;
 	
@@ -95,7 +93,7 @@
 	object universal_ = { -1, NULL, SCALAR_TYPE_};
 	pobject pUniversal = &universal_;
 
-#line 99 "trabalho.tab.c" /* yacc.c:339  */
+#line 97 "trabalho.tab.c" /* yacc.c:339  */
 
 # ifndef YY_NULLPTR
 #  if defined __cplusplus && 201103L <= __cplusplus
@@ -174,7 +172,7 @@ extern int yydebug;
 typedef union YYSTYPE YYSTYPE;
 union YYSTYPE
 {
-#line 33 "trabalho.y" /* yacc.c:355  */
+#line 31 "trabalho.y" /* yacc.c:355  */
 
 	int integer;
 	int boolean;
@@ -185,7 +183,7 @@ union YYSTYPE
 	struct object *obj;
 	int label;
 
-#line 189 "trabalho.tab.c" /* yacc.c:355  */
+#line 187 "trabalho.tab.c" /* yacc.c:355  */
 };
 # define YYSTYPE_IS_TRIVIAL 1
 # define YYSTYPE_IS_DECLARED 1
@@ -200,7 +198,7 @@ int yyparse (void);
 
 /* Copy the second part of user declarations.  */
 
-#line 204 "trabalho.tab.c" /* yacc.c:358  */
+#line 202 "trabalho.tab.c" /* yacc.c:358  */
 
 #ifdef short
 # undef short
@@ -501,12 +499,12 @@ static const yytype_uint8 yytranslate[] =
   /* YYRLINE[YYN] -- Source line where rule number YYN was defined.  */
 static const yytype_uint16 yyrline[] =
 {
-       0,    87,    87,    96,    97,   100,   101,   104,   117,   118,
-     124,   127,   130,   133,   138,   141,   143,   144,   146,   153,
-     160,   166,   172,   177,   182,   183,   193,   194,   195,   198,
-     203,   209,   214,   218,   222,   227,   232,   237,   242,   249,
-     255,   261,   267,   270,   271,   272,   273,   274,   275,   276,
-     282,   284,   292,   305,   319,   325,   331,   338,   347
+       0,    85,    85,    96,    97,   100,   101,   104,   116,   117,
+     122,   125,   128,   131,   136,   139,   141,   142,   144,   151,
+     158,   164,   169,   173,   178,   179,   186,   187,   188,   191,
+     194,   200,   205,   209,   213,   218,   223,   228,   233,   240,
+     246,   252,   258,   261,   262,   263,   264,   265,   266,   267,
+     273,   275,   283,   296,   310,   316,   322,   328,   335
 };
 #endif
 
@@ -1351,12 +1349,14 @@ yyreduce:
   switch (yyn)
     {
         case 2:
-#line 87 "trabalho.y" /* yacc.c:1646  */
+#line 85 "trabalho.y" /* yacc.c:1646  */
     {endBlock();
-			fprintf(asm_file, "%s", "\n-- end");
+			fprintf(asm_file, "%s", "\n");
 
+			printHeader(asm_file,varCount);
 			fclose(asm_file);
-
+			
+			
 			printf("Codigo gerado com sucesso! [code.asm]\n");
 		   }
 #line 1363 "trabalho.tab.c" /* yacc.c:1646  */
@@ -1365,238 +1365,229 @@ yyreduce:
   case 7:
 #line 104 "trabalho.y" /* yacc.c:1646  */
     {
-			printf("DEclarando variavel\n");
 			pobject ob = (yyvsp[-3].obj);
 			while(ob != 0 && ob->eKind == NO_KIND_DEF_){
 				ob->eKind = VAR_;
 				ob->_.Var.pType = (yyvsp[-1].obj);
 				ob = ob->pNext;
+				varCount++;
 			}
-			printf("saiu DEclarando variavel\n");
 			
 		}
-#line 1379 "trabalho.tab.c" /* yacc.c:1646  */
+#line 1378 "trabalho.tab.c" /* yacc.c:1646  */
     break;
 
   case 8:
-#line 117 "trabalho.y" /* yacc.c:1646  */
+#line 116 "trabalho.y" /* yacc.c:1646  */
     {addIdentificador((yyval.obj),(yyvsp[-2].obj),(yyvsp[0].obj));}
-#line 1385 "trabalho.tab.c" /* yacc.c:1646  */
+#line 1384 "trabalho.tab.c" /* yacc.c:1646  */
     break;
 
   case 9:
-#line 118 "trabalho.y" /* yacc.c:1646  */
+#line 117 "trabalho.y" /* yacc.c:1646  */
     {
-		//printf("LI\n");
 		addIdentificador((yyval.obj),0,(yyvsp[0].obj));
 		}
-#line 1394 "trabalho.tab.c" /* yacc.c:1646  */
+#line 1392 "trabalho.tab.c" /* yacc.c:1646  */
     break;
 
   case 10:
-#line 124 "trabalho.y" /* yacc.c:1646  */
+#line 122 "trabalho.y" /* yacc.c:1646  */
     { 
 					(yyval.obj) = pInt;
 					}
-#line 1402 "trabalho.tab.c" /* yacc.c:1646  */
+#line 1400 "trabalho.tab.c" /* yacc.c:1646  */
     break;
 
   case 11:
-#line 127 "trabalho.y" /* yacc.c:1646  */
+#line 125 "trabalho.y" /* yacc.c:1646  */
     { 
 					(yyval.obj) = pChar;
 					}
-#line 1410 "trabalho.tab.c" /* yacc.c:1646  */
+#line 1408 "trabalho.tab.c" /* yacc.c:1646  */
     break;
 
   case 12:
-#line 130 "trabalho.y" /* yacc.c:1646  */
+#line 128 "trabalho.y" /* yacc.c:1646  */
     { 
 					(yyval.obj) = pBool;
 					}
-#line 1418 "trabalho.tab.c" /* yacc.c:1646  */
+#line 1416 "trabalho.tab.c" /* yacc.c:1646  */
     break;
 
   case 13:
-#line 133 "trabalho.y" /* yacc.c:1646  */
+#line 131 "trabalho.y" /* yacc.c:1646  */
     { 
 					(yyval.obj) = pString;
 					}
-#line 1426 "trabalho.tab.c" /* yacc.c:1646  */
+#line 1424 "trabalho.tab.c" /* yacc.c:1646  */
     break;
 
   case 14:
-#line 138 "trabalho.y" /* yacc.c:1646  */
+#line 136 "trabalho.y" /* yacc.c:1646  */
     { endBlock();}
-#line 1432 "trabalho.tab.c" /* yacc.c:1646  */
+#line 1430 "trabalho.tab.c" /* yacc.c:1646  */
     break;
 
   case 18:
-#line 146 "trabalho.y" /* yacc.c:1646  */
+#line 144 "trabalho.y" /* yacc.c:1646  */
     {
 		int l = newLabel();
 		(yyval.label) = l;
 		fprintf(asm_file,"\tTJMP_FW L%d\n",l);
 		}
-#line 1442 "trabalho.tab.c" /* yacc.c:1646  */
+#line 1440 "trabalho.tab.c" /* yacc.c:1646  */
     break;
 
   case 19:
-#line 153 "trabalho.y" /* yacc.c:1646  */
+#line 151 "trabalho.y" /* yacc.c:1646  */
     {
 		int l = newLabel();
 		(yyval.label) = l;
 		fprintf(asm_file,"\tTJMP_FW L%d\nL%d\n",l,l-1);
 		}
-#line 1452 "trabalho.tab.c" /* yacc.c:1646  */
+#line 1450 "trabalho.tab.c" /* yacc.c:1646  */
     break;
 
   case 20:
-#line 160 "trabalho.y" /* yacc.c:1646  */
+#line 158 "trabalho.y" /* yacc.c:1646  */
     {
 	int l = newLabel();
 	(yyval.label) = l;
 	fprintf(asm_file,"L%d\n",l);
 }
-#line 1462 "trabalho.tab.c" /* yacc.c:1646  */
+#line 1460 "trabalho.tab.c" /* yacc.c:1646  */
     break;
 
   case 21:
-#line 166 "trabalho.y" /* yacc.c:1646  */
+#line 164 "trabalho.y" /* yacc.c:1646  */
     {
 			if(!CheckTypes((yyvsp[-3].obj),pBool)) {yyerror("Erro if\n");YYERROR;}
-			//printf("entrou no if\n");
 			fprintf(asm_file,"L%d:\n",(yyvsp[-1].label));
 			
 		}
-#line 1473 "trabalho.tab.c" /* yacc.c:1646  */
+#line 1470 "trabalho.tab.c" /* yacc.c:1646  */
     break;
 
   case 22:
-#line 172 "trabalho.y" /* yacc.c:1646  */
+#line 169 "trabalho.y" /* yacc.c:1646  */
     {
 			if(CheckTypes((yyvsp[-6].obj),pBool) != 1) {yyerror("Erro if\n");YYERROR;}
-			//printf("entrou no if then else tipo do 2 %d %d  <- BOOLEAN \n",$2->obj->attribute->type,BOOLEAN);
 			fprintf(asm_file,"L%d:\n",(yyvsp[-1].label));
 		}
-#line 1483 "trabalho.tab.c" /* yacc.c:1646  */
+#line 1479 "trabalho.tab.c" /* yacc.c:1646  */
     break;
 
   case 23:
-#line 177 "trabalho.y" /* yacc.c:1646  */
+#line 173 "trabalho.y" /* yacc.c:1646  */
     {
 			if(!CheckTypes((yyvsp[-3].obj),pBool)) {yyerror("Erro while\n");YYERROR;}
 			
 			fprintf(asm_file,"\tJMP_BW L%d\nL%d\n",(yyvsp[-4].label),(yyvsp[-1].label));
 		}
-#line 1493 "trabalho.tab.c" /* yacc.c:1646  */
+#line 1489 "trabalho.tab.c" /* yacc.c:1646  */
     break;
 
   case 25:
-#line 183 "trabalho.y" /* yacc.c:1646  */
+#line 179 "trabalho.y" /* yacc.c:1646  */
     {
-			printf("Testando igual \n");
-			if(!CheckTypes((yyvsp[-4].obj)->_.Var.pType,(yyvsp[-1].obj))) {
-				printf(" Erro tipo 1 %d , tipo 2 %d\n", (yyvsp[-4].obj)->eKind,(yyvsp[-1].obj)->eKind);
+			if(!CheckTypes((yyvsp[-4].obj),(yyvsp[-1].obj))) {
 				yyerror("Erro atibuicao\n");
 				YYERROR;
 			}
 			fprintf(asm_file,"\tSTORE_VAR %d\n",(yyvsp[-4].obj)->name);
-			printf("saiu\n");
 		}
-#line 1508 "trabalho.tab.c" /* yacc.c:1646  */
+#line 1501 "trabalho.tab.c" /* yacc.c:1646  */
     break;
 
   case 29:
-#line 198 "trabalho.y" /* yacc.c:1646  */
+#line 191 "trabalho.y" /* yacc.c:1646  */
     {
-
-				printf("rope rope aaaaaaaaaaa\n");
 		fprintf(asm_file,"\tDUP\n");}
-#line 1517 "trabalho.tab.c" /* yacc.c:1646  */
+#line 1508 "trabalho.tab.c" /* yacc.c:1646  */
     break;
 
   case 30:
-#line 203 "trabalho.y" /* yacc.c:1646  */
+#line 194 "trabalho.y" /* yacc.c:1646  */
     { if(!CheckTypes((yyvsp[-2].obj),(yyvsp[0].obj))) {yyerror("Erro and\n");YYERROR;}
 					if(!CheckTypes((yyvsp[-2].obj),pBool)) {yyerror("Erro and 2\n");YYERROR;}
 					(yyval.obj) = pBool;
 					
 					fprintf(asm_file,"\tAND\n");
 				  }
-#line 1528 "trabalho.tab.c" /* yacc.c:1646  */
+#line 1519 "trabalho.tab.c" /* yacc.c:1646  */
     break;
 
   case 31:
-#line 209 "trabalho.y" /* yacc.c:1646  */
+#line 200 "trabalho.y" /* yacc.c:1646  */
     { if(!CheckTypes((yyvsp[-2].obj),(yyvsp[0].obj))) {yyerror("Erro or\n");YYERROR;}
 				   if(!CheckTypes((yyvsp[-2].obj),pBool)) {yyerror ("Erro or 2\n");YYERROR;}
 					(yyval.obj) = pBool;
 					fprintf(asm_file,"\tOR\n");
 				  }
-#line 1538 "trabalho.tab.c" /* yacc.c:1646  */
+#line 1529 "trabalho.tab.c" /* yacc.c:1646  */
     break;
 
   case 32:
-#line 214 "trabalho.y" /* yacc.c:1646  */
+#line 205 "trabalho.y" /* yacc.c:1646  */
     { if(!CheckTypes((yyvsp[-2].obj),(yyvsp[0].obj))) {yyerror("Erro less than\n");YYERROR;}
 				    (yyval.obj) = pBool;
 					fprintf(asm_file,"\tLT\n");
 				  }
-#line 1547 "trabalho.tab.c" /* yacc.c:1646  */
+#line 1538 "trabalho.tab.c" /* yacc.c:1646  */
     break;
 
   case 33:
-#line 218 "trabalho.y" /* yacc.c:1646  */
+#line 209 "trabalho.y" /* yacc.c:1646  */
     { if(!CheckTypes((yyvsp[-2].obj),(yyvsp[0].obj))) {yyerror("Erro greater than\n");YYERROR;}
 				    (yyval.obj) = pBool;
 					fprintf(asm_file,"\tGT\n");
 				  }
-#line 1556 "trabalho.tab.c" /* yacc.c:1646  */
+#line 1547 "trabalho.tab.c" /* yacc.c:1646  */
     break;
 
   case 34:
-#line 222 "trabalho.y" /* yacc.c:1646  */
+#line 213 "trabalho.y" /* yacc.c:1646  */
     { 
 					if(!CheckTypes((yyvsp[-2].obj),(yyvsp[0].obj))) {yyerror("Erro less equal\n");YYERROR;}
 				    (yyval.obj) = pBool;
 					fprintf(asm_file,"\tLE\n");
 				  }
-#line 1566 "trabalho.tab.c" /* yacc.c:1646  */
+#line 1557 "trabalho.tab.c" /* yacc.c:1646  */
     break;
 
   case 35:
-#line 227 "trabalho.y" /* yacc.c:1646  */
+#line 218 "trabalho.y" /* yacc.c:1646  */
     { 	
 					if(!CheckTypes((yyvsp[-2].obj),(yyvsp[0].obj))) {yyerror("Erro greater equal\n");YYERROR;}
 				    (yyval.obj) = pBool;
 					fprintf(asm_file,"\tGE\n");
 				  }
-#line 1576 "trabalho.tab.c" /* yacc.c:1646  */
+#line 1567 "trabalho.tab.c" /* yacc.c:1646  */
     break;
 
   case 36:
-#line 232 "trabalho.y" /* yacc.c:1646  */
+#line 223 "trabalho.y" /* yacc.c:1646  */
     { 
 					if(!CheckTypes((yyvsp[-2].obj),(yyvsp[0].obj))) {yyerror("Erro equal equal\n");YYERROR;}
 				    (yyval.obj) = pBool;
 					fprintf(asm_file,"\tEQ\n");
 				  }
-#line 1586 "trabalho.tab.c" /* yacc.c:1646  */
+#line 1577 "trabalho.tab.c" /* yacc.c:1646  */
     break;
 
   case 37:
-#line 237 "trabalho.y" /* yacc.c:1646  */
+#line 228 "trabalho.y" /* yacc.c:1646  */
     {
 					if(!CheckTypes((yyvsp[-2].obj),(yyvsp[0].obj))) {yyerror("Erro not equal\n");YYERROR;}
 				    (yyval.obj)  = pBool;
 					fprintf(asm_file,"\tNE\n");
 				  }
-#line 1596 "trabalho.tab.c" /* yacc.c:1646  */
+#line 1587 "trabalho.tab.c" /* yacc.c:1646  */
     break;
 
   case 38:
-#line 242 "trabalho.y" /* yacc.c:1646  */
+#line 233 "trabalho.y" /* yacc.c:1646  */
     { 
 					if(!CheckTypes((yyvsp[-2].obj),(yyvsp[0].obj))) {yyerror("Erro plus\n");YYERROR;}
 					if(!CheckTypes((yyvsp[-2].obj),pInt) && !CheckTypes((yyvsp[-2].obj),pString)) yyerror("Erro tipo plus\n");
@@ -1604,112 +1595,112 @@ yyreduce:
 					else (yyval.obj) = pString;
 					fprintf(asm_file,"\tADD\n");
 				  }
-#line 1608 "trabalho.tab.c" /* yacc.c:1646  */
+#line 1599 "trabalho.tab.c" /* yacc.c:1646  */
     break;
 
   case 39:
-#line 249 "trabalho.y" /* yacc.c:1646  */
+#line 240 "trabalho.y" /* yacc.c:1646  */
     { 
 					if(!CheckTypes((yyvsp[-2].obj),(yyvsp[0].obj))) {yyerror("Erro minus\n");YYERROR;}
 					if(!CheckTypes((yyvsp[-2].obj),pInt)) {yyerror("Erro tipo minus\n");YYERROR;}
 				    (yyval.obj) = pInt;
 					fprintf(asm_file,"\tSUB\n");
 				  }
-#line 1619 "trabalho.tab.c" /* yacc.c:1646  */
+#line 1610 "trabalho.tab.c" /* yacc.c:1646  */
     break;
 
   case 40:
-#line 255 "trabalho.y" /* yacc.c:1646  */
+#line 246 "trabalho.y" /* yacc.c:1646  */
     { 
 					if(!CheckTypes((yyvsp[-2].obj),(yyvsp[0].obj))) {yyerror("Erro times\n");YYERROR;}
 					if(!CheckTypes((yyvsp[-2].obj),pInt)) {yyerror("Erro tipo Times\n");YYERROR;}
 				    (yyval.obj) = pInt;
 					fprintf(asm_file,"\tMUL\n");
 				  }
-#line 1630 "trabalho.tab.c" /* yacc.c:1646  */
+#line 1621 "trabalho.tab.c" /* yacc.c:1646  */
     break;
 
   case 41:
-#line 261 "trabalho.y" /* yacc.c:1646  */
+#line 252 "trabalho.y" /* yacc.c:1646  */
     { 
 					if(!CheckTypes((yyvsp[-2].obj),(yyvsp[0].obj))) {yyerror("Erro divide\n");YYERROR;}
 					if(!CheckTypes((yyvsp[-2].obj),pInt)) {yyerror("Erro divide plus\n");YYERROR;}
 				    (yyval.obj) = pInt;
 					fprintf(asm_file,"\tDIV\n");
 				  }
-#line 1641 "trabalho.tab.c" /* yacc.c:1646  */
+#line 1632 "trabalho.tab.c" /* yacc.c:1646  */
     break;
 
   case 42:
-#line 267 "trabalho.y" /* yacc.c:1646  */
+#line 258 "trabalho.y" /* yacc.c:1646  */
     {(yyval.obj) = (yyvsp[0].obj);}
-#line 1647 "trabalho.tab.c" /* yacc.c:1646  */
+#line 1638 "trabalho.tab.c" /* yacc.c:1646  */
     break;
 
   case 43:
-#line 270 "trabalho.y" /* yacc.c:1646  */
+#line 261 "trabalho.y" /* yacc.c:1646  */
     {(yyval.obj) = (yyvsp[0].obj);}
-#line 1653 "trabalho.tab.c" /* yacc.c:1646  */
+#line 1644 "trabalho.tab.c" /* yacc.c:1646  */
     break;
 
   case 44:
-#line 271 "trabalho.y" /* yacc.c:1646  */
+#line 262 "trabalho.y" /* yacc.c:1646  */
     {(yyval.obj) = (yyvsp[0].obj);}
-#line 1659 "trabalho.tab.c" /* yacc.c:1646  */
+#line 1650 "trabalho.tab.c" /* yacc.c:1646  */
     break;
 
   case 45:
-#line 272 "trabalho.y" /* yacc.c:1646  */
+#line 263 "trabalho.y" /* yacc.c:1646  */
     {(yyval.obj) = (yyvsp[0].obj);}
-#line 1665 "trabalho.tab.c" /* yacc.c:1646  */
+#line 1656 "trabalho.tab.c" /* yacc.c:1646  */
     break;
 
   case 46:
-#line 273 "trabalho.y" /* yacc.c:1646  */
+#line 264 "trabalho.y" /* yacc.c:1646  */
     {(yyval.obj) = (yyvsp[0].obj);}
-#line 1671 "trabalho.tab.c" /* yacc.c:1646  */
+#line 1662 "trabalho.tab.c" /* yacc.c:1646  */
     break;
 
   case 47:
-#line 274 "trabalho.y" /* yacc.c:1646  */
+#line 265 "trabalho.y" /* yacc.c:1646  */
     { (yyval.obj) = (yyvsp[0].obj);}
-#line 1677 "trabalho.tab.c" /* yacc.c:1646  */
+#line 1668 "trabalho.tab.c" /* yacc.c:1646  */
     break;
 
   case 48:
-#line 275 "trabalho.y" /* yacc.c:1646  */
+#line 266 "trabalho.y" /* yacc.c:1646  */
     {(yyval.obj) = (yyvsp[0].obj);}
-#line 1683 "trabalho.tab.c" /* yacc.c:1646  */
+#line 1674 "trabalho.tab.c" /* yacc.c:1646  */
     break;
 
   case 49:
-#line 276 "trabalho.y" /* yacc.c:1646  */
+#line 267 "trabalho.y" /* yacc.c:1646  */
     { 
 				(yyval.obj) = (yyvsp[0].obj);
 				fprintf(asm_file,"\tLOAD_VAR %d\n",(yyvsp[0].obj)->name);
 			}
-#line 1692 "trabalho.tab.c" /* yacc.c:1646  */
+#line 1683 "trabalho.tab.c" /* yacc.c:1646  */
     break;
 
   case 50:
-#line 282 "trabalho.y" /* yacc.c:1646  */
+#line 273 "trabalho.y" /* yacc.c:1646  */
     {newBlock();}
-#line 1698 "trabalho.tab.c" /* yacc.c:1646  */
+#line 1689 "trabalho.tab.c" /* yacc.c:1646  */
     break;
 
   case 51:
-#line 284 "trabalho.y" /* yacc.c:1646  */
+#line 275 "trabalho.y" /* yacc.c:1646  */
     {
 		asm_file = fopen("code.asm","w");
 
-		fprintf(asm_file, "%s", "-- Pascalmm Ver. 1.0\n\n");
+		fprintf(asm_file, "%s", "                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                \n");
 		newBlock();
 	}
-#line 1709 "trabalho.tab.c" /* yacc.c:1646  */
+#line 1700 "trabalho.tab.c" /* yacc.c:1646  */
     break;
 
   case 52:
-#line 292 "trabalho.y" /* yacc.c:1646  */
+#line 283 "trabalho.y" /* yacc.c:1646  */
     { 
 			pobject p = (pobject)malloc(sizeof(object));
 			if((p=Find((yyvsp[0].sToken))) == 0){
@@ -1721,11 +1712,11 @@ yyreduce:
 			p->name = (yyvsp[0].sToken);
 			(yyval.obj) = p;
 			}
-#line 1725 "trabalho.tab.c" /* yacc.c:1646  */
+#line 1716 "trabalho.tab.c" /* yacc.c:1646  */
     break;
 
   case 53:
-#line 305 "trabalho.y" /* yacc.c:1646  */
+#line 296 "trabalho.y" /* yacc.c:1646  */
     { 
 			pobject p = (pobject)malloc(sizeof(object));
 			if( (p=Search((yyvsp[0].sToken))) !=0 ){
@@ -1738,11 +1729,20 @@ yyreduce:
 			p->name = (yyvsp[0].sToken);
 			(yyval.obj) = p;
 }
-#line 1742 "trabalho.tab.c" /* yacc.c:1646  */
+#line 1733 "trabalho.tab.c" /* yacc.c:1646  */
     break;
 
   case 54:
-#line 319 "trabalho.y" /* yacc.c:1646  */
+#line 310 "trabalho.y" /* yacc.c:1646  */
+    { 
+				fprintf(asm_file,"\tLOAD_CONST %d\n", (yyvsp[0].sToken));
+				(yyval.obj) = pBool;
+				}
+#line 1742 "trabalho.tab.c" /* yacc.c:1646  */
+    break;
+
+  case 55:
+#line 316 "trabalho.y" /* yacc.c:1646  */
     { 
 				fprintf(asm_file,"\tLOAD_CONST %d\n", (yyvsp[0].sToken));
 				(yyval.obj) = pBool;
@@ -1750,48 +1750,36 @@ yyreduce:
 #line 1751 "trabalho.tab.c" /* yacc.c:1646  */
     break;
 
-  case 55:
-#line 325 "trabalho.y" /* yacc.c:1646  */
+  case 56:
+#line 322 "trabalho.y" /* yacc.c:1646  */
     { 
 				fprintf(asm_file,"\tLOAD_CONST %d\n", (yyvsp[0].sToken));
-				(yyval.obj) = pBool;
+				(yyval.obj) = pChar;
 				}
 #line 1760 "trabalho.tab.c" /* yacc.c:1646  */
     break;
 
-  case 56:
-#line 331 "trabalho.y" /* yacc.c:1646  */
-    { 
+  case 57:
+#line 328 "trabalho.y" /* yacc.c:1646  */
+    {
 				fprintf(asm_file,"\tLOAD_CONST %d\n", (yyvsp[0].sToken));
-				printf("load char\n");
-				(yyval.obj) = pChar;
+				(yyval.obj) = pString;
+				
 				}
 #line 1770 "trabalho.tab.c" /* yacc.c:1646  */
     break;
 
-  case 57:
-#line 338 "trabalho.y" /* yacc.c:1646  */
-    {
-				printf("String entrou\n");
-				fprintf(asm_file,"\tLOAD_CONST %d\n", (yyvsp[0].sToken));
-				(yyval.obj) = pString;
-				
-				printf("String entrou SAIU\n");
-				}
-#line 1782 "trabalho.tab.c" /* yacc.c:1646  */
-    break;
-
   case 58:
-#line 347 "trabalho.y" /* yacc.c:1646  */
+#line 335 "trabalho.y" /* yacc.c:1646  */
     { 
 				fprintf(asm_file,"\tLOAD_CONST %d\n", (yyvsp[0].sToken));
 				(yyval.obj) = pInt;
 				}
-#line 1791 "trabalho.tab.c" /* yacc.c:1646  */
+#line 1779 "trabalho.tab.c" /* yacc.c:1646  */
     break;
 
 
-#line 1795 "trabalho.tab.c" /* yacc.c:1646  */
+#line 1783 "trabalho.tab.c" /* yacc.c:1646  */
       default: break;
     }
   /* User semantic actions sometimes alter yychar, and that requires
@@ -2019,7 +2007,7 @@ yyreturn:
 #endif
   return yyresult;
 }
-#line 353 "trabalho.y" /* yacc.c:1906  */
+#line 341 "trabalho.y" /* yacc.c:1906  */
 
 int main( void )
 {

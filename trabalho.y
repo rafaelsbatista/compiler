@@ -3,7 +3,6 @@
 	#include <string.h>
 	#include "scope_structure.h"
 	#include "attribute.h"
-	#include "code_generator.h"
 	
 	FILE* asm_file;
 	
@@ -13,7 +12,7 @@
 		printf("bison-- error %s\n",s);
 		return 0;
 	}
-	
+	int varCount = 0;
 	object int_ = { -1, NULL, SCALAR_TYPE_};
 	pobject pInt = &int_;
 	
@@ -84,10 +83,12 @@
 %%
 
 P: NBI LDE {endBlock();
-			fprintf(asm_file, "%s", "\n-- end");
+			fprintf(asm_file, "%s", "\n");
 
+			printHeader(asm_file,varCount);
 			fclose(asm_file);
-
+			
+			
 			printf("Codigo gerado com sucesso! [code.asm]\n");
 		   }
 ;
@@ -106,6 +107,7 @@ DV:		R_VAR LI T_COLON TP T_SEMICOLON{
 				ob->eKind = VAR_;
 				ob->_.Var.pType = $4;
 				ob = ob->pNext;
+				varCount++;
 			}
 			
 		}
@@ -175,7 +177,7 @@ S:		R_IF E R_THEN MT S {
 		}
 |		B
 |		F MA T_EQ E T_SEMICOLON {
-			if(!CheckTypes($1->_.Var.pType,$4)) {
+			if(!CheckTypes($1,$4)) {
 				yyerror("Erro atibuicao\n");
 				YYERROR;
 			}
@@ -273,7 +275,7 @@ NB: {newBlock();}
 NBI: {
 		asm_file = fopen("code.asm","w");
 
-		fprintf(asm_file, "%s", "-- Pascalmm Ver. 1.0\n\n");
+		fprintf(asm_file, "%s", "                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                \n");
 		newBlock();
 	}
 ;

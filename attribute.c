@@ -17,7 +17,7 @@ int addCharConst(char c){
 		constTable = obj;
 	}
 	else{
-		constTable->pNext = obj;
+		obj->pNext = constTable;
 		obj->sToken = constTable->sToken + 1;
 		constTable = obj;
 	}
@@ -37,7 +37,7 @@ int addIntConst(int n){
 		constTable = obj;
 	}
 	else{
-		constTable->pNext = obj;
+		obj->pNext = constTable;
 		obj->sToken = constTable->sToken + 1;
 		constTable = obj;
 	}
@@ -56,7 +56,7 @@ int addStringConst(char *s){
 		constTable = obj;
 	}
 	else{
-		constTable->pNext = obj;
+		obj->pNext = constTable;
 		obj->sToken = constTable->sToken + 1;
 		constTable = obj;
 	}
@@ -75,9 +75,33 @@ int addBooleanConst(int b){
 		constTable = obj;
 	}
 	else{
-		constTable->pNext = obj;
+		obj->pNext = constTable;
 		obj->sToken = constTable->sToken + 1;
 		constTable = obj;
 	}
 	return constTable->sToken;
+}
+
+void printHeader(FILE *asm_file2, int varCount){
+	fprintf(asm_file2, "%s", "\nEND FUNC");	
+	fseek(asm_file2,0,SEEK_SET);
+	pt_const consta = constTable;
+	while(consta != 0){
+		switch(consta->type){
+			case INTEGER:
+				fprintf(asm_file2, "%s %d\n", "CONST INT",consta->intVal);
+				break;
+			case CHARACTER:
+				fprintf(asm_file2, "%s %c\n", "CONST CHR",consta->charVal);
+				break;
+			case STRING:
+				fprintf(asm_file2, "%s %s\n", "CONST STR",consta->stringVal);
+				break;
+			case BOOLEAN:
+				fprintf(asm_file2, "%s %d\n", "CONST INT",consta->booleanVal);
+				break;
+		}
+		consta = consta->pNext;
+	}
+	fprintf(asm_file2, "%s %d\n", "functionMain 0 1",varCount);
 }

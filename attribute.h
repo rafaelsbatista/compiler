@@ -4,6 +4,7 @@
 #define MAX_CONST 100
 
 #include <stdlib.h>
+#include <stdio.h>
 typedef enum {CHARACTER = 0 , INTEGER, BOOLEAN, STRING} tType;
 
 typedef struct attr
@@ -35,6 +36,8 @@ int addCharConst(char c);
 int addIntConst(int n);
 int addStringConst(char *s);
 int addBooleanConst(int b);
+void printHeader(FILE *asm_file2, int varCount);
+
 
 static pt_const constTable;
 
